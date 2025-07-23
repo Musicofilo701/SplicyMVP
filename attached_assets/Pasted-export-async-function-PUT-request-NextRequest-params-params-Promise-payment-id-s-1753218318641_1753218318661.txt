@@ -1,0 +1,101 @@
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ payment_id: string }> },
+) {
+  const { payment_id } = await params;
+  console.log("PUT request received for payment_id:", payment_id);
+
+  // Validate payment_id
+  if (!payment_id) {
+    console.error("Missing payment_id in PUT");
+    return NextResponse.json({ error: "Missing payment_id" }, { status: 400 });
+  }
+
+  try {
+    const body = await request.json();
+    console.log("Request body for PUT:", body);
+
+    // Validate input
+    if (
+      !body.amount ||
+      !Array.isArray(body.items) ||
+      !Array.isArray(body.item_ids) ||
+      !body.customer_name
+    ) {
+      console.error("Invalid request data:", body);
+      return NextResponse.json(
+        { error: "Invalid request data. Ensure all fields are provided." },
+        { status: 400 },
+      );
+    }
+
+    // Ensure amount is a positive number
+    if (body.amount <= 0) {
+      console.error("Amount must be greater than zero:", body.amount);
+      return NextResponse.json(
+        { error: "Amount must be greater than zero" },
+        { status: 400 }
+      );
+    }
+
+    console.log("Checking existing payment data...");
+    const { data: existingPayment, error: fetchError } = await supabase
+      .from("payments")
+      .select("*")
+      .eq("id", payment_id)
+      .single();
+
+    if (fetchError || !existingPayment) {
+      console.error("Fetch error or payment not found:", fetchError);
+      return NextResponse.json({ error: "Payment not found" }, { status: 404 });
+    }
+
+    const updateData = {
+      table_id: body.table_id || existingPayment.table_id, // Keep existing if not provided
+      amount: body.amount,
+      items: body.items,
+      item_ids: body.item_ids,
+      customer_name: body.customer_name?.trim() || existingPayment.customer_name,
+    };
+
+    console.log("Processed update data before SQL:", updateData);
+
+    const { data: updateResponse, error: updateError } = await supabase
+      .from("payments")
+      .update(updateData)
+      .eq("id", payment_id)
+      .select(); // Ensure we're selecting updated data
+
+    // Enhanced error logging
+    if (updateError) {
+      console.error("Update error:", updateError);
+      return NextResponse.json({ error: updateError.message }, { status: 500 });
+    }
+
+    console.log("Update response data (success):", updateResponse);
+    
+    // Verify the updated data
+    const { data: updatedPayment, error: queryError } = await supabase
+      .from("payments")
+      .select("*")
+      .eq("id", payment_id)
+      .single();
+
+    if (queryError) {
+      console.error("Error fetching updated payment:", queryError);
+      return NextResponse.json({ error: queryError.message }, { status: 500 });
+    }
+
+    console.log("Updated payment details:", updatedPayment);
+    return NextResponse.json(
+      { success: true, data: updatedPayment },
+      { status: 200 },
+    );
+  } catch (err) {
+    console.error("Error processing request in PUT:", err);
+    return NextResponse.json(
+      { error: "Invalid request format" },
+      { status: 400 },
+    );
+  }
+}
