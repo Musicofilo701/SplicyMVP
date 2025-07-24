@@ -34,13 +34,14 @@ return NextResponse.json({ ...data, orderTotal})
 }
 
 export async function POST(request: NextRequest) {
-try {
-    const rawText = await request.text();
-    console.log("Raw request text for orders:", rawText);
-
-    const data = JSON.parse(rawText);
-} catch (error: any) {
-    console.error("Failed to parse JSON:", error);
-    return NextResponse.json({ error: 'Invalid JSON', details: error.message }, { status: 400 });
-}
+    try {
+        const data = await request.json();
+        console.log("POST request received for orders:", data);
+        
+        // Add your order creation logic here
+        return NextResponse.json({ success: true, data });
+    } catch (error: any) {
+        console.error("Failed to parse JSON:", error);
+        return NextResponse.json({ error: 'Invalid JSON', details: error.message }, { status: 400 });
+    }
 }
