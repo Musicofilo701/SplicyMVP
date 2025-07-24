@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> 461cb27a17fa336e417741d27f6a50c6f626d00e
 {
   "name": "splicy",
   "version": "0.1.0",
@@ -14,10 +11,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.51.0",
-<<<<<<< HEAD
     "axios": "^1.10.0",
-=======
->>>>>>> 461cb27a17fa336e417741d27f6a50c6f626d00e
     "next": "15.4.1",
     "react": "19.1.0",
     "react-dom": "19.1.0"
