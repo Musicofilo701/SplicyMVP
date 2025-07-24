@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> 461cb27a17fa336e417741d27f6a50c6f626d00e
 // app/api/tables/[table_id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
@@ -26,11 +23,7 @@ export async function GET(request: NextRequest) {
   if (orderError || !orderRow) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
-<<<<<<< HEAD
   const orderItems = orderRow.items as Array<{ id: string; price: string | number }>;
-=======
-  const orderItems = orderRow.items as any[];
->>>>>>> 461cb27a17fa336e417741d27f6a50c6f626d00e
 
   // 2) Prendi i pagamenti
   const { data: payments, error: paymentError } = await supabase
