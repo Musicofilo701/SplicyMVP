@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { OrderItem } from "@/types/api";
+import { requireAuth, AuthenticatedRequest } from "@/app/lib/auth";
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
-export async function GET(request: NextRequest) {
+export const GET = requireAuth(async (request: AuthenticatedRequest) => {
     const { searchParams } = new URL(request.url);
     const table_id = searchParams.get("table_id");
     console.log("GET request received for orders, table_id:", table_id);
@@ -43,10 +44,14 @@ export async function GET(request: NextRequest) {
     );
 
     console.log("Order fetched successfully:", order);
-    return NextResponse.json({ ...order, orderTotal });
-}
+    return NextResponse.json({ 
+        ...order, 
+        orderTotal,
+        restaurant: request.restaurant?.name 
+    });
+});
 
-export async function POST(request: NextRequest) {
+export const POST = requireAuth(async (request: AuthenticatedRequest) => {
     try {
         const rawText = await request.text();
         console.log("Raw request text:", rawText);
@@ -79,7 +84,7 @@ export async function POST(request: NextRequest) {
 
         console.log("Order created successfully:", newOrder);
         return NextResponse.json(
-            { success: true, data: newOrder },
+            { success: true, data: newOrder, restaurant: request.restaurant?.name },
             { status: 201 },
         );
     } catch (parseError) {
@@ -95,9 +100,9 @@ export async function POST(request: NextRequest) {
             { status: 400 },
         );
     }
-}
+});
 
-export async function PUT(request: NextRequest) {
+export const PUT = requireAuth(async (request: AuthenticatedRequest) => {
     try {
         const rawText = await request.text();
         console.log("Raw request text for PUT:", rawText);
@@ -132,7 +137,7 @@ export async function PUT(request: NextRequest) {
 
         console.log("Order updated successfully:", updatedOrder);
         return NextResponse.json(
-            { success: true, data: updatedOrder },
+            { success: true, data: updatedOrder, restaurant: request.restaurant?.name },
             { status: 200 },
         );
     } catch (parseError) {
@@ -148,9 +153,9 @@ export async function PUT(request: NextRequest) {
             { status: 400 },
         );
     }
-}
+});
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = requireAuth(async (request: AuthenticatedRequest) => {
     const { searchParams } = new URL(request.url);
     const table_id = searchParams.get("table_id");
     console.log(`DELETE request received for table_id: ${table_id}`);
@@ -208,5 +213,8 @@ export async function DELETE(request: NextRequest) {
     }
 
     console.log("Order successfully deleted for table_id:", table_id);
-    return NextResponse.json({ success: true }, { status: 200 });
-}
+    return NextResponse.json({ 
+        success: true, 
+        restaurant: request.restaurant?.name 
+    }, { status: 200 });
+});
