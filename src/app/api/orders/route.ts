@@ -163,8 +163,14 @@ export async function DELETE(request: NextRequest) {
         );
     }
 
-    // Log to check what’s in the database before deletion
-    const { data: existingOrder, error: fetchError } = await supabase
+    // Create service role client for delete operations
+    const serviceSupabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+
+    // Log to check what's in the database before deletion
+    const { data: existingOrder, error: fetchError } = await serviceSupabase
         .from("orders")
         .select("*")
         .eq("table_id", table_id)
@@ -178,8 +184,8 @@ export async function DELETE(request: NextRequest) {
 
     console.log("Existing order for verification before deletion:", existingOrder);
 
-    // Proceed to delete
-    const { error } = await supabase
+    // Proceed to delete with service role
+    const { error } = await serviceSupabase
         .from("orders")
         .delete()
         .eq("table_id", table_id);
@@ -189,7 +195,18 @@ export async function DELETE(request: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Confirm deletion
-    console.log("Order delete called for table_id:", table_id);
+    // Confirm deletion by checking if record still exists
+    const { data: verifyDeleted } = await serviceSupabase
+        .from("orders")
+        .select("id")
+        .eq("table_id", table_id)
+        .single();
+
+    if (verifyDeleted) {
+        console.error("Order still exists after delete attempt");
+        return NextResponse.json({ error: "Delete failed - order still exists" }, { status: 500 });
+    }
+
+    console.log("Order successfully deleted for table_id:", table_id);
     return NextResponse.json({ success: true }, { status: 200 });
 }
