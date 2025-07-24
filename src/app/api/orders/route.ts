@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { OrderItem } from "@/types/api";
@@ -11,7 +12,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const table_id = searchParams.get("table_id");
 
+    console.log("GET request received for orders, table_id:", table_id);
+
     if (!table_id) {
+        console.error("Missing table_id in GET");
         return NextResponse.json(
             { error: "Missing table_id" },
             { status: 400 },
@@ -21,24 +25,39 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .eq("table_id", table_id)
-        .single();
+        .eq("table_id", table_id);
 
     if (error) {
+        console.error("Error fetching orders:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const orderTotal = data.items.reduce(
+    // Check if any orders were found
+    if (!data || data.length === 0) {
+        console.error("Order not found for table_id:", table_id);
+        return NextResponse.json(
+            { error: "Order not found" },
+            { status: 404 }
+        );
+    }
+
+    // Get the first order (assuming one order per table)
+    const order = data[0];
+    const orderTotal = order.items.reduce(
         (sum: number, item: OrderItem) => sum + Number(item.price),
         0,
     );
 
-    return NextResponse.json({ ...data, orderTotal });
+    console.log("Order fetched successfully:", order);
+    return NextResponse.json({ ...order, orderTotal });
 }
 
 export async function POST(request: NextRequest) {
     try {
-        const data = await request.json();
+        const rawText = await request.text();
+        console.log("Raw request text:", rawText);
+        
+        const data = JSON.parse(rawText);
         console.log("POST request received for orders:", data);
 
         // Validate the incoming order data
@@ -56,14 +75,17 @@ export async function POST(request: NextRequest) {
         }
 
         // Insert the new order into Supabase
-        const { data: newOrder, error } = await supabase.from("orders").insert([
-            {
-                table_id,
-                items,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            },
-        ]);
+        const { data: newOrder, error } = await supabase
+            .from("orders")
+            .insert([
+                {
+                    table_id,
+                    items,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                },
+            ])
+            .select();
 
         // Check for error during insertion
         if (error) {
@@ -71,11 +93,16 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        return NextResponse.json({ success: true, order: newOrder });
-    } catch (error: any) {
-        console.error("Failed to parse JSON:", error);
+        console.log("Order created successfully:", newOrder);
+        return NextResponse.json({ success: true, data: newOrder }, { status: 201 });
+        
+    } catch (parseError) {
+        console.error("JSON Parse Error:", parseError);
         return NextResponse.json(
-            { error: "Invalid JSON", details: error.message },
+            { 
+                error: "Invalid JSON format in request body",
+                details: parseError instanceof Error ? parseError.message : "Unknown parse error"
+            },
             { status: 400 },
         );
     }
