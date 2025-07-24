@@ -8,10 +8,14 @@ const supabase = createClient(
 );
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { table_id, amount, items, item_ids, customer_name } = body;
+  try {
+    const rawText = await request.text();
+    console.log("Raw request text:", rawText);
+    
+    const body = JSON.parse(rawText);
+    const { table_id, amount, items, item_ids, customer_name } = body;
 
-  console.log("POST request received with body:", body);
+    console.log("POST request received with body:", body);
 
   if (!table_id || !amount || !items) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -64,6 +68,13 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({ success: true, data }, { status: 201 });
+  } catch (parseError) {
+    console.error("JSON Parse Error:", parseError);
+    return NextResponse.json({ 
+      error: "Invalid JSON format in request body",
+      details: parseError instanceof Error ? parseError.message : "Unknown parse error"
+    }, { status: 400 });
+  }
 }
 
 export async function GET(request: NextRequest) {
