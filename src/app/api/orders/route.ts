@@ -82,7 +82,6 @@ export async function POST(request: NextRequest) {
                     table_id,
                     items,
                     created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
                 },
             ])
             .select();
