@@ -122,7 +122,7 @@ export default function TablePage() {
   return (
     <div className="min-h-screen bg-white max-w-md mx-auto">
       {/* Green Header */}
-      <div className="bg-green-400 h-32 relative">
+      <div className="bg-[#7ED957] h-32 relative">
         <div className="absolute top-4 right-4 text-right">
           <p className="text-xs text-black opacity-70">Powered by</p>
           <p className="text-sm font-bold text-black">SPLICY</p>
@@ -137,13 +137,13 @@ export default function TablePage() {
 
       {/* Tab Navigation */}
       <div className="px-6 mb-6">
-        <div className="flex bg-green-100 rounded-full p-1">
+        <div className="flex bg-[#7ED957] rounded-full p-1">
           <button
             onClick={() => setCurrentView('menu')}
             className={`flex-1 py-3 px-6 text-base font-medium rounded-full transition-all ${
               currentView === 'menu'
-                ? 'bg-green-500 text-white shadow-sm'
-                : 'text-green-700'
+                ? 'bg-[#7ED957] text-black shadow-sm'
+                : 'bg-[#1B5E20] text-white'
             }`}
           >
             Menù
@@ -152,8 +152,8 @@ export default function TablePage() {
             onClick={() => setCurrentView('payment')}
             className={`flex-1 py-3 px-6 text-base font-medium rounded-full transition-all ${
               currentView === 'payment'
-                ? 'bg-green-800 text-white shadow-sm'
-                : 'text-green-700'
+                ? 'bg-[#1B5E20] text-white shadow-sm'
+                : 'bg-[#7ED957] text-black'
             }`}
           >
             Paga il conto
@@ -225,7 +225,7 @@ function MenuView({ order }: { order: Order }) {
 
       {/* Floating Action Button */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
-        <button className="bg-green-600 text-white px-6 py-3 rounded-full font-medium shadow-lg">
+        <button className="bg-[#1B5E20] text-white px-6 py-3 rounded-full font-medium shadow-lg">
           Paga ora online
         </button>
       </div>
@@ -269,7 +269,7 @@ function PaymentView({
           <h2 className="text-lg font-semibold text-black">Scegli cosa pagare</h2>
           <button
             onClick={onSelectAll}
-            className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="px-4 py-2 text-sm font-medium bg-[#1B5E20] text-white rounded-lg hover:bg-[#2E7D32] transition-colors"
           >
             Seleziona tutto
           </button>
@@ -282,7 +282,7 @@ function PaymentView({
                   type="checkbox"
                   checked={paymentSelection.selectedItems.includes(item.id)}
                   onChange={() => onSelectItem(item.id)}
-                  className="h-5 w-5 text-green-600 rounded border-gray-300 focus:ring-green-500"
+                  className="h-5 w-5 text-[#1B5E20] rounded border-gray-300 focus:ring-[#1B5E20]"
                 />
                 <div className="flex-1 flex justify-between items-center">
                   <span className="font-medium text-black">{item.name}</span>
@@ -307,7 +307,7 @@ function PaymentView({
                 onClick={() => handleTipPercentage(percentage)}
                 className={`py-3 px-4 text-sm font-medium rounded-lg border transition-colors ${
                   paymentSelection.tipPercentage === percentage
-                    ? 'bg-green-600 text-white border-green-600'
+                    ? 'bg-[#1B5E20] text-white border-[#1B5E20]'
                     : 'bg-white text-black border-gray-300 hover:border-gray-400'
                 }`}
               >
@@ -348,7 +348,7 @@ function PaymentView({
         disabled={paymentSelection.selectedItems.length === 0}
         className={`w-full py-4 px-6 text-lg font-semibold rounded-xl transition-colors ${
           paymentSelection.selectedItems.length > 0
-            ? 'bg-green-600 text-white hover:bg-green-700'
+            ? 'bg-[#1B5E20] text-white hover:bg-[#2E7D32]'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >
