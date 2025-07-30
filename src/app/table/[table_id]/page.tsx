@@ -137,24 +137,26 @@ export default function TablePage() {
 
       {/* Tab Navigation */}
       <div className="px-6 mb-6">
-        <div className="flex bg-[#a9fdc0] rounded-full p-1">
+        <div className="flex rounded-full overflow-hidden">
           <button
             onClick={() => setCurrentView('menu')}
-            className={`flex-1 py-3 px-6 text-base font-bold rounded-full transition-all ${
+            className={`flex-1 py-3 px-6 text-base font-bold transition-all ${
               currentView === 'menu'
-                ? 'bg-[#a9fdc0] text-[#000000] shadow-sm'
+                ? 'bg-[#a9fdc0] text-[#000000]'
                 : 'bg-[#013D22] text-white'
             }`}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
           >
             Menù
           </button>
           <button
             onClick={() => setCurrentView('payment')}
-            className={`flex-1 py-3 px-6 text-base font-bold rounded-full transition-all ${
+            className={`flex-1 py-3 px-6 text-base font-bold transition-all ${
               currentView === 'payment'
-                ? 'bg-[#a9fdc0] text-[#000000] shadow-sm'
+                ? 'bg-[#a9fdc0] text-[#000000]'
                 : 'bg-[#013D22] text-white'
             }`}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
           >
             Paga il conto
           </button>
@@ -208,13 +210,13 @@ function MenuView({ order }: { order: Order }) {
       {/* Menu Items */}
       <div className="space-y-4">
         {order.items.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="bg-[#a9fdc0] rounded-2xl p-4 flex justify-between items-start">
+          <div key={`${item.id}-${index}`} className="bg-[#fefff5] rounded-2xl p-4 flex justify-between items-start shadow-sm border border-gray-100">
             <div className="flex-1">
-              <h3 className="font-bold text-[#000000] text-lg mb-2">{item.name}</h3>
-              <p className="text-[#000000] text-sm leading-relaxed mb-3">
+              <h3 className="font-bold text-[#000000] text-lg mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>{item.name}</h3>
+              <p className="text-[#000000] text-sm leading-relaxed mb-3" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
                 {item.description || "pane bun al pomodoro, pulled pork, cipolla di tropea caramellata, stracciatella, scamorza fusa affumicata, salsa BBQ e rucola selvatica. Aggiunta di Bacon possibile"}
               </p>
-              <p className="text-[#000000] font-bold text-lg">{item.price.toFixed(2)}€</p>
+              <p className="text-[#000000] font-bold text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>{item.price.toFixed(2)}€</p>
             </div>
             {index === 0 && (
               <div className="w-20 h-20 bg-[#013D22] rounded-xl ml-4 flex-shrink-0"></div>
