@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -65,14 +66,25 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       table_id,
+      restaurant_id: restaurant_id || null,
       has_order: true,
-      items: order.items,
-      orderTotal,
-      totalPaid,
-      status,
-      payments: payments || [],
-      restaurant_id: order.restaurant_id,
-      created_at: order.created_at
+      order: {
+        items: order.items,
+        total: orderTotal,
+        created_at: order.created_at
+      },
+      payment_summary: {
+        total_paid: totalPaid,
+        remaining: Math.max(0, orderTotal - totalPaid),
+        status,
+        payment_count: payments?.length || 0
+      },
+      item_breakdown: {
+        paid_items: paidItems,
+        unpaid_items: unpaidItems
+      },
+      access_granted: true,
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {
