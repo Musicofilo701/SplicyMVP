@@ -130,7 +130,7 @@ export default function TablePage() {
             </div>
             <div className="text-right">
               <p className="text-xs text-gray-400">Powered by</p>
-              <p className="text-sm font-semibold text-black">SPLAY</p>
+              <p className="text-sm font-semibold text-black">Splicy</p>
             </div>
           </div>
         </div>
