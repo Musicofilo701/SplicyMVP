@@ -152,8 +152,8 @@ export default function TablePage() {
             onClick={() => setCurrentView('payment')}
             className={`flex-1 py-3 px-6 text-base font-bold rounded-full transition-all ${
               currentView === 'payment'
-                ? 'bg-[#013D22] text-white shadow-sm'
-                : 'bg-[#a9fdc0] text-[#000000]'
+                ? 'bg-[#a9fdc0] text-[#000000] shadow-sm'
+                : 'bg-[#013D22] text-white'
             }`}
           >
             Paga il conto
