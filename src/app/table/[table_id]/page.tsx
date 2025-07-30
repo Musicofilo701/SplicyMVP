@@ -94,10 +94,10 @@ export default function TablePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-[#fefff5] flex items-center justify-center" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Caricamento...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#013D22] mx-auto"></div>
+          <p className="mt-4 text-[#000000] font-bold">Caricamento...</p>
         </div>
       </div>
     );
@@ -105,13 +105,13 @@ export default function TablePage() {
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#fefff5] flex items-center justify-center p-4" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">
+          <h1 className="text-xl font-bold text-[#000000] mb-2">
             Ordine non trovato
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[#000000]">
             {error || 'Non è stato possibile trovare un ordine per questo tavolo.'}
           </p>
         </div>
@@ -120,40 +120,40 @@ export default function TablePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white max-w-md mx-auto">
+    <div className="min-h-screen bg-[#fefff5] max-w-md mx-auto" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
       {/* Green Header */}
-      <div className="bg-[#7ED957] h-32 relative">
+      <div className="bg-[#a9fdc0] h-32 relative">
         <div className="absolute top-4 right-4 text-right">
-          <p className="text-xs text-black opacity-70">Powered by</p>
-          <p className="text-sm font-bold text-black">SPLICY</p>
+          <p className="text-xs text-[#000000] opacity-70">Powered by</p>
+          <p className="text-sm font-bold text-[#000000]">SPLICY</p>
         </div>
       </div>
 
       {/* Restaurant Info */}
-      <div className="bg-white px-6 py-4 -mt-8 relative z-10 rounded-t-3xl">
-        <h1 className="text-2xl font-bold text-black mb-1">Birreria Italiana</h1>
-        <p className="text-gray-600 text-base">Tavolo {table_id}</p>
+      <div className="bg-[#fefff5] px-6 py-4 -mt-8 relative z-10 rounded-t-3xl">
+        <h1 className="text-2xl font-bold text-[#000000] mb-1" style={{ fontSize: '25px', fontWeight: 'bold' }}>Birreria Italiana</h1>
+        <p className="text-[#000000] text-base">Tavolo {table_id}</p>
       </div>
 
       {/* Tab Navigation */}
       <div className="px-6 mb-6">
-        <div className="flex bg-[#7ED957] rounded-full p-1">
+        <div className="flex bg-[#a9fdc0] rounded-full p-1">
           <button
             onClick={() => setCurrentView('menu')}
-            className={`flex-1 py-3 px-6 text-base font-medium rounded-full transition-all ${
+            className={`flex-1 py-3 px-6 text-base font-bold rounded-full transition-all ${
               currentView === 'menu'
-                ? 'bg-[#7ED957] text-black shadow-sm'
-                : 'bg-[#1B5E20] text-white'
+                ? 'bg-[#a9fdc0] text-[#000000] shadow-sm'
+                : 'bg-[#013D22] text-white'
             }`}
           >
             Menù
           </button>
           <button
             onClick={() => setCurrentView('payment')}
-            className={`flex-1 py-3 px-6 text-base font-medium rounded-full transition-all ${
+            className={`flex-1 py-3 px-6 text-base font-bold rounded-full transition-all ${
               currentView === 'payment'
-                ? 'bg-[#1B5E20] text-white shadow-sm'
-                : 'bg-[#7ED957] text-black'
+                ? 'bg-[#013D22] text-white shadow-sm'
+                : 'bg-[#a9fdc0] text-[#000000]'
             }`}
           >
             Paga il conto
@@ -190,17 +190,17 @@ function MenuView({ order }: { order: Order }) {
   return (
     <div className="space-y-4">
       {/* Tab categories */}
-      <div className="flex space-x-6 border-b border-gray-200">
-        <button className="pb-3 text-black font-semibold border-b-2 border-black">
+      <div className="flex space-x-6 border-b border-[#013D22]">
+        <button className="pb-3 text-[#000000] font-bold border-b-2 border-[#000000]">
           Raccomandati
         </button>
-        <button className="pb-3 text-gray-400">
+        <button className="pb-3 text-[#000000] opacity-60">
           Antipasti
         </button>
-        <button className="pb-3 text-gray-400">
+        <button className="pb-3 text-[#000000] opacity-60">
           Primi
         </button>
-        <button className="pb-3 text-gray-400">
+        <button className="pb-3 text-[#000000] opacity-60">
           Secondi
         </button>
       </div>
@@ -208,16 +208,16 @@ function MenuView({ order }: { order: Order }) {
       {/* Menu Items */}
       <div className="space-y-4">
         {order.items.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="bg-gray-100 rounded-2xl p-4 flex justify-between items-start">
+          <div key={`${item.id}-${index}`} className="bg-[#a9fdc0] rounded-2xl p-4 flex justify-between items-start">
             <div className="flex-1">
-              <h3 className="font-bold text-black text-lg mb-2">{item.name}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+              <h3 className="font-bold text-[#000000] text-lg mb-2">{item.name}</h3>
+              <p className="text-[#000000] text-sm leading-relaxed mb-3">
                 {item.description || "pane bun al pomodoro, pulled pork, cipolla di tropea caramellata, stracciatella, scamorza fusa affumicata, salsa BBQ e rucola selvatica. Aggiunta di Bacon possibile"}
               </p>
-              <p className="text-black font-bold text-lg">{item.price.toFixed(2)}€</p>
+              <p className="text-[#000000] font-bold text-lg">{item.price.toFixed(2)}€</p>
             </div>
             {index === 0 && (
-              <div className="w-20 h-20 bg-gray-300 rounded-xl ml-4 flex-shrink-0"></div>
+              <div className="w-20 h-20 bg-[#013D22] rounded-xl ml-4 flex-shrink-0"></div>
             )}
           </div>
         ))}
@@ -225,7 +225,7 @@ function MenuView({ order }: { order: Order }) {
 
       {/* Floating Action Button */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
-        <button className="bg-[#1B5E20] text-white px-6 py-3 rounded-full font-medium shadow-lg">
+        <button className="bg-[#013D22] text-white px-6 py-3 rounded-full font-bold shadow-lg">
           Paga ora online
         </button>
       </div>
@@ -264,17 +264,17 @@ function PaymentView({
   return (
     <div className="space-y-6">
       {/* Item Selection */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-black">Scegli cosa pagare</h2>
+      <div className="bg-[#fefff5] rounded-xl border border-[#013D22]">
+        <div className="p-4 border-b border-[#013D22] flex justify-between items-center">
+          <h2 className="text-lg font-bold text-[#000000]">Scegli cosa pagare</h2>
           <button
             onClick={onSelectAll}
-            className="px-4 py-2 text-sm font-medium bg-[#1B5E20] text-white rounded-lg hover:bg-[#2E7D32] transition-colors"
+            className="px-4 py-2 text-sm font-bold bg-[#013D22] text-white rounded-lg hover:bg-[#013D22] transition-colors"
           >
             Seleziona tutto
           </button>
         </div>
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-[#013D22]">
           {order.items.map((item, index) => (
             <div key={`${item.id}-${index}`} className="p-4">
               <div className="flex items-center space-x-4">
@@ -282,11 +282,11 @@ function PaymentView({
                   type="checkbox"
                   checked={paymentSelection.selectedItems.includes(item.id)}
                   onChange={() => onSelectItem(item.id)}
-                  className="h-5 w-5 text-[#1B5E20] rounded border-gray-300 focus:ring-[#1B5E20]"
+                  className="h-5 w-5 text-[#013D22] rounded border-[#013D22] focus:ring-[#013D22]"
                 />
                 <div className="flex-1 flex justify-between items-center">
-                  <span className="font-medium text-black">{item.name}</span>
-                  <span className="font-semibold text-black">€{item.price.toFixed(2)}</span>
+                  <span className="font-bold text-[#000000]">{item.name}</span>
+                  <span className="font-bold text-[#000000]">€{item.price.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -295,9 +295,9 @@ function PaymentView({
       </div>
 
       {/* Tip Selection */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-black">Mancia</h2>
+      <div className="bg-[#fefff5] rounded-xl border border-[#013D22]">
+        <div className="p-4 border-b border-[#013D22]">
+          <h2 className="text-lg font-bold text-[#000000]">Mancia</h2>
         </div>
         <div className="p-4">
           <div className="grid grid-cols-4 gap-3">
@@ -305,10 +305,10 @@ function PaymentView({
               <button
                 key={percentage}
                 onClick={() => handleTipPercentage(percentage)}
-                className={`py-3 px-4 text-sm font-medium rounded-lg border transition-colors ${
+                className={`py-3 px-4 text-sm font-bold rounded-lg border transition-colors ${
                   paymentSelection.tipPercentage === percentage
-                    ? 'bg-[#1B5E20] text-white border-[#1B5E20]'
-                    : 'bg-white text-black border-gray-300 hover:border-gray-400'
+                    ? 'bg-[#013D22] text-white border-[#013D22]'
+                    : 'bg-[#fefff5] text-[#000000] border-[#013D22] hover:border-[#013D22]'
                 }`}
               >
                 {percentage}%
@@ -319,24 +319,24 @@ function PaymentView({
       </div>
 
       {/* Payment Summary */}
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className="bg-[#fefff5] rounded-xl border border-[#013D22]">
         <div className="p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Articoli selezionati</span>
-            <span className="font-semibold text-black">€{selectedTotal.toFixed(2)}</span>
+            <span className="text-[#000000]">Articoli selezionati</span>
+            <span className="font-bold text-[#000000]">€{selectedTotal.toFixed(2)}</span>
           </div>
           {tipAmount > 0 && (
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Mancia</span>
-              <span className="font-semibold text-black">€{tipAmount.toFixed(2)}</span>
+              <span className="text-[#000000]">Mancia</span>
+              <span className="font-bold text-[#000000]">€{tipAmount.toFixed(2)}</span>
             </div>
           )}
-          <div className="border-t border-gray-200 pt-4">
+          <div className="border-t border-[#013D22] pt-4">
             <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold text-black">Il tuo conto</span>
+              <span className="text-lg font-bold text-[#000000]">Il tuo conto</span>
               <div className="text-right">
-                <span className="text-xl font-bold text-black">€{finalTotal.toFixed(2)}</span>
-                <p className="text-sm text-gray-500">IVA incl.</p>
+                <span className="text-xl font-bold text-[#000000]" style={{ fontSize: '25px' }}>€{finalTotal.toFixed(2)}</span>
+                <p className="text-sm text-[#000000]">IVA incl.</p>
               </div>
             </div>
           </div>
@@ -346,10 +346,10 @@ function PaymentView({
       {/* Pay Button */}
       <button
         disabled={paymentSelection.selectedItems.length === 0}
-        className={`w-full py-4 px-6 text-lg font-semibold rounded-xl transition-colors ${
+        className={`w-full py-4 px-6 text-lg font-bold rounded-xl transition-colors ${
           paymentSelection.selectedItems.length > 0
-            ? 'bg-[#1B5E20] text-white hover:bg-[#2E7D32]'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? 'bg-[#013D22] text-white hover:bg-[#013D22]'
+            : 'bg-[#a9fdc0] text-[#000000] cursor-not-allowed'
         }`}
       >
         Paga
