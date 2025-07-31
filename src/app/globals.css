@@ -59,6 +59,9 @@ body {
   .backdrop-blur-sm {
     backdrop-filter: blur(4px);
   }
+  .backdrop-blur-md {
+    backdrop-filter: blur(8px);
+  }
 }
 
 /* Custom mobile-first styles */
