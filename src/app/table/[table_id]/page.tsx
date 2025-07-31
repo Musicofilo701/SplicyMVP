@@ -168,16 +168,7 @@ export default function TablePage() {
         {currentView === 'menu' ? (
           <MenuView order={order} />
         ) : (
-          <PaymentView
-            order={order}
-            paymentSelection={paymentSelection}
-            onSelectItem={handleSelectItem}
-            onSelectAll={handleSelectAll}
-            onTipChange={setPaymentSelection}
-            selectedTotal={calculateSelectedTotal()}
-            tipAmount={calculateTipAmount()}
-            finalTotal={calculateFinalTotal()}
-          />
+          <PaymentView order={order} />
         )}
       </div>
 
@@ -236,126 +227,53 @@ function MenuView({ order }: { order: Order }) {
 }
 
 // Payment View Component
-function PaymentView({ 
-  order, 
-  paymentSelection, 
-  onSelectItem, 
-  onSelectAll,
-  onTipChange,
-  selectedTotal,
-  tipAmount,
-  finalTotal
-}: {
-  order: Order;
-  paymentSelection: PaymentSelection;
-  onSelectItem: (itemId: string) => void;
-  onSelectAll: () => void;
-  onTipChange: (selection: PaymentSelection) => void;
-  selectedTotal: number;
-  tipAmount: number;
-  finalTotal: number;
-}) {
-  const handleTipPercentage = (percentage: number) => {
-    onTipChange({
-      ...paymentSelection,
-      tipPercentage: percentage,
-      customTip: 0
-    });
-  };
-
+function PaymentView({ order }: { order: Order }) {
   return (
     <div className="space-y-6">
-      {/* Item Selection */}
-      <div className="bg-[#fefff5] rounded-xl border border-[#013D22]">
-        <div className="p-4 border-b border-[#013D22] flex justify-between items-center">
-          <h2 className="text-lg font-bold text-[#000000]">Scegli cosa pagare</h2>
-          <button
-            onClick={onSelectAll}
-            className="px-4 py-2 text-sm font-bold bg-[#013D22] text-white rounded-lg hover:bg-[#013D22] transition-colors"
-          >
-            Seleziona tutto
-          </button>
-        </div>
-        <div className="divide-y divide-[#013D22]">
-          {order.items.map((item, index) => (
-            <div key={`${item.id}-${index}`} className="p-4">
-              <div className="flex items-center space-x-4">
-                <input
-                  type="checkbox"
-                  checked={paymentSelection.selectedItems.includes(item.id)}
-                  onChange={() => onSelectItem(item.id)}
-                  className="h-5 w-5 text-[#013D22] rounded border-[#013D22] focus:ring-[#013D22]"
-                />
-                <div className="flex-1 flex justify-between items-center">
-                  <span className="font-bold text-[#000000]">{item.name}</span>
-                  <span className="font-bold text-[#000000]">€{item.price.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+      {/* Order Total Section */}
+      <div className="text-center">
+        <h2 className="text-lg font-bold text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+          Conto totale
+        </h2>
+        <div className="text-4xl font-bold text-[#000000] mb-1" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+          {order.orderTotal.toFixed(2)}€
         </div>
       </div>
 
-      {/* Tip Selection */}
-      <div className="bg-[#fefff5] rounded-xl border border-[#013D22]">
-        <div className="p-4 border-b border-[#013D22]">
-          <h2 className="text-lg font-bold text-[#000000]">Mancia</h2>
-        </div>
-        <div className="p-4">
-          <div className="grid grid-cols-4 gap-3">
-            {[0, 5, 10, 15].map(percentage => (
-              <button
-                key={percentage}
-                onClick={() => handleTipPercentage(percentage)}
-                className={`py-3 px-4 text-sm font-bold rounded-lg border transition-colors ${
-                  paymentSelection.tipPercentage === percentage
-                    ? 'bg-[#013D22] text-white border-[#013D22]'
-                    : 'bg-[#fefff5] text-[#000000] border-[#013D22] hover:border-[#013D22]'
-                }`}
-              >
-                {percentage}%
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Payment Summary */}
-      <div className="bg-[#fefff5] rounded-xl border border-[#013D22]">
-        <div className="p-4 space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-[#000000]">Articoli selezionati</span>
-            <span className="font-bold text-[#000000]">€{selectedTotal.toFixed(2)}</span>
-          </div>
-          {tipAmount > 0 && (
-            <div className="flex justify-between items-center">
-              <span className="text-[#000000]">Mancia</span>
-              <span className="font-bold text-[#000000]">€{tipAmount.toFixed(2)}</span>
+      {/* Order Items List */}
+      <div className="space-y-3">
+        {order.items.map((item, index) => (
+          <div key={`${item.id}-${index}`} className="flex justify-between items-center py-2">
+            <div className="flex items-center space-x-3">
+              <div className="w-2 h-2 bg-[#000000] rounded-full"></div>
+              <span className="text-[#000000] font-medium" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+                {item.name}
+              </span>
             </div>
-          )}
-          <div className="border-t border-[#013D22] pt-4">
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-bold text-[#000000]">Il tuo conto</span>
-              <div className="text-right">
-                <span className="text-xl font-bold text-[#000000]" style={{ fontSize: '25px' }}>€{finalTotal.toFixed(2)}</span>
-                <p className="text-sm text-[#000000]">IVA incl.</p>
-              </div>
+            <div className="text-right">
+              <span className="text-[#000000] text-sm mr-2" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+                {item.price < 10 ? `${item.price.toFixed(2)}€` : `${Math.floor(item.price)},${(item.price % 1 * 100).toFixed(0).padStart(2, '0')}€`}
+              </span>
+              <span className="text-[#000000] font-bold" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+                {item.price < 10 ? `${item.price.toFixed(2)}€` : `${Math.floor(item.price)},${(item.price % 1 * 100).toFixed(0).padStart(2, '0')}€`}
+              </span>
             </div>
           </div>
-        </div>
+        ))}
       </div>
 
-      {/* Pay Button */}
-      <button
-        disabled={paymentSelection.selectedItems.length === 0}
-        className={`w-full py-4 px-6 text-lg font-bold rounded-xl transition-colors ${
-          paymentSelection.selectedItems.length > 0
-            ? 'bg-[#013D22] text-white hover:bg-[#013D22]'
-            : 'bg-[#a9fdc0] text-[#000000] cursor-not-allowed'
-        }`}
-      >
-        Paga
-      </button>
+      {/* Payment Options */}
+      <div className="space-y-4 mt-8">
+        {/* Pay Full Amount Button */}
+        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg transition-colors hover:bg-[#013D22]" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+          Paga il totale del conto
+        </button>
+
+        {/* Pay Partial Amount Button */}
+        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg transition-colors hover:bg-[#013D22]" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+          Paga una parte
+        </button>
+      </div>
     </div>
   );
 }
