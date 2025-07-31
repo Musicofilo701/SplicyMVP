@@ -172,6 +172,11 @@ export default function TablePage() {
     setShowTipModal(true);
   };
 
+  const handleTipComplete = () => {
+    setShowTipModal(false);
+    setShowPaymentModal(true);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#fefff5] flex items-center justify-center" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
