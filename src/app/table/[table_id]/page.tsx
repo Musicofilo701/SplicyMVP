@@ -831,7 +831,6 @@ function CustomAmountModal({
   const isValidAmount = amount > 0 && amount <= orderTotal;
 
   const handleCustomAmountChangeWrapper = (e: any) => {
-    ```text
     const value = e.target.value;
     onCustomAmountChange(value);
     if (value) {
