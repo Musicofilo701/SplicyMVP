@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -27,7 +26,7 @@ interface PaymentSelection {
 export default function TablePage() {
   const params = useParams();
   const table_id = params.table_id as string;
-  
+
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,6 +43,10 @@ export default function TablePage() {
   const [showTipModal, setShowTipModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentType, setPaymentType] = useState<'full' | 'partial'>('full');
+  const [showEqualDivisionModal, setShowEqualDivisionModal] = useState(false);
+  const [showCustomAmountModal, setShowCustomAmountModal] = useState(false);
+  const [peopleCount, setPeopleCount] = useState('');
+  const [customAmount, setCustomAmount] = useState('');
 
   useEffect(() => {
     fetchTableOrder();
@@ -115,6 +118,26 @@ export default function TablePage() {
   const handleTipComplete = () => {
     setShowTipModal(false);
     setShowPaymentModal(true);
+  };
+
+  const handleEqualDivision = () => {
+    setShowPartialModal(false);
+    setShowEqualDivisionModal(true);
+  };
+
+  const handleCustomAmountSelection = () => {
+    setShowPartialModal(false);
+    setShowCustomAmountModal(true);
+  };
+
+  const handleEqualDivisionComplete = () => {
+    setShowEqualDivisionModal(false);
+    setShowTipModal(true);
+  };
+
+  const handleCustomAmountComplete = () => {
+    setShowCustomAmountModal(false);
+    setShowTipModal(true);
   };
 
   if (loading) {
@@ -206,6 +229,8 @@ export default function TablePage() {
         <PartialPaymentModal 
           onClose={() => setShowPartialModal(false)}
           onProductSelection={handleProductSelection}
+          onEqualDivision={handleEqualDivision}
+          onCustomAmountSelection={handleCustomAmountSelection}
         />
       )}
 
@@ -234,6 +259,26 @@ export default function TablePage() {
         <PaymentModal 
           total={calculateFinalTotal()}
           onClose={() => setShowPaymentModal(false)}
+        />
+      )}
+
+      {showEqualDivisionModal && (
+        <EqualDivisionModal
+          orderTotal={order.orderTotal}
+          peopleCount={peopleCount}
+          onPeopleCountChange={setPeopleCount}
+          onClose={() => setShowEqualDivisionModal(false)}
+          onComplete={handleEqualDivisionComplete}
+        />
+      )}
+
+      {showCustomAmountModal && (
+        <CustomAmountModal
+          orderTotal={order.orderTotal}
+          customAmount={customAmount}
+          onCustomAmountChange={setCustomAmount}
+          onClose={() => setShowCustomAmountModal(false)}
+          onComplete={handleCustomAmountComplete}
         />
       )}
 
@@ -362,10 +407,14 @@ function PaymentView({
 // Partial Payment Modal
 function PartialPaymentModal({ 
   onClose, 
-  onProductSelection 
+  onProductSelection,
+  onEqualDivision,
+  onCustomAmountSelection
 }: { 
   onClose: () => void;
   onProductSelection: () => void;
+  onEqualDivision: () => void;
+  onCustomAmountSelection: () => void;
 }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -383,10 +432,16 @@ function PartialPaymentModal({
 
         {/* Options */}
         <div className="space-y-4">
-          <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base">
+          <button 
+            onClick={onEqualDivision}
+            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base"
+          >
             Dividi in parti uguali
           </button>
-          <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base">
+          <button 
+            onClick={onCustomAmountSelection}
+            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base"
+          >
             Scegli un importo personalizzato
           </button>
           <button 
@@ -463,7 +518,7 @@ function ProductSelectionModal({
             <span className="text-[#000000] font-bold">Il tuo conto</span>
             <span className="text-[#000000] font-bold">{selectedTotal.toFixed(2)}€</span>
           </div>
-          
+
           <button 
             onClick={onComplete}
             disabled={selectedItems.length === 0}
@@ -615,6 +670,156 @@ function PaymentModal({
         {/* Pay Button */}
         <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg">
           Paga
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Equal Division Modal
+function EqualDivisionModal({ 
+  orderTotal,
+  peopleCount,
+  onPeopleCountChange,
+  onClose,
+  onComplete
+}: { 
+  orderTotal: number;
+  peopleCount: string;
+  onPeopleCountChange: (count: string) => void;
+  onClose: () => void;
+  onComplete: () => void;
+}) {
+  const shareAmount = peopleCount && parseInt(peopleCount) > 0 ? orderTotal / parseInt(peopleCount) : 0;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <button onClick={onClose} className="text-[#000000] text-xl">
+            ←
+          </button>
+          <h2 className="text-lg font-bold text-[#000000]">Dividi in parti uguali</h2>
+          <button onClick={onClose} className="text-[#000000] text-xl">
+            ×
+          </button>
+        </div>
+
+        {/* Instructions */}
+        <p className="text-[#000000] text-center mb-6 text-sm">
+          Inserisci il numero di persone per dividere il conto totale di {orderTotal.toFixed(2)}€
+        </p>
+
+        {/* Input */}
+        <div className="mb-6">
+          <label className="block text-[#000000] font-bold mb-2">Numero di persone</label>
+          <input
+            type="number"
+            value={peopleCount}
+            onChange={(e) => onPeopleCountChange(e.target.value)}
+            placeholder="Es. 4"
+            min="1"
+            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+          />
+        </div>
+
+        {/* Share Display */}
+        {shareAmount > 0 && (
+          <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
+            <span className="text-[#000000] font-bold">La tua parte</span>
+            <span className="text-[#000000] font-bold">{shareAmount.toFixed(2)}€</span>
+          </div>
+        )}
+
+        {/* Continue Button */}
+        <button 
+          onClick={onComplete}
+          disabled={!peopleCount || parseInt(peopleCount) <= 0}
+          className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+            peopleCount && parseInt(peopleCount) > 0 ? 'bg-[#013D22]' : 'bg-gray-400'
+          }`}
+        >
+          Continua
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Custom Amount Modal
+function CustomAmountModal({ 
+  orderTotal,
+  customAmount,
+  onCustomAmountChange,
+  onClose,
+  onComplete
+}: { 
+  orderTotal: number;
+  customAmount: string;
+  onCustomAmountChange: (amount: string) => void;
+  onClose: () => void;
+  onComplete: () => void;
+}) {
+  const amount = customAmount && parseFloat(customAmount) > 0 ? parseFloat(customAmount) : 0;
+  const isValidAmount = amount > 0 && amount <= orderTotal;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <button onClick={onClose} className="text-[#000000] text-xl">
+            ←
+          </button>
+          <h2 className="text-lg font-bold text-[#000000]">Importo personalizzato</h2>
+          <button onClick={onClose} className="text-[#000000] text-xl">
+            ×
+          </button>
+        </div>
+
+        {/* Instructions */}
+        <p className="text-[#000000] text-center mb-6 text-sm">
+          Inserisci l'importo che vuoi pagare (massimo {orderTotal.toFixed(2)}€)
+        </p>
+
+        {/* Input */}
+        <div className="mb-6">
+          <label className="block text-[#000000] font-bold mb-2">Importo da pagare</label>
+          <input
+            type="number"
+            value={customAmount}
+            onChange={(e) => onCustomAmountChange(e.target.value)}
+            placeholder="Es. 25.50"
+            min="0.01"
+            max={orderTotal}
+            step="0.01"
+            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+          />
+          {amount > orderTotal && (
+            <p className="text-red-500 text-sm mt-2">L'importo non può superare il totale del conto</p>
+          )}
+        </div>
+
+        {/* Amount Display */}
+        {isValidAmount && (
+          <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
+            <span className="text-[#000000] font-bold">Importo da pagare</span>
+            <span className="text-[#000000] font-bold">{amount.toFixed(2)}€</span>
+          </div>
+        )}
+
+        {/* Continue Button */}
+        <button 
+          onClick={onComplete}
+          disabled={!isValidAmount}
+          className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+            isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
+          }`}
+        >
+          Continua
         </button>
       </div>
     </div>
