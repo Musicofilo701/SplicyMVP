@@ -467,7 +467,7 @@ function PartialPaymentModal({
   onCustomAmountSelection: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -525,7 +525,7 @@ function ProductSelectionModal({
     .reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -619,7 +619,7 @@ function TipModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -710,7 +710,7 @@ function PaymentModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -760,7 +760,7 @@ function EqualDivisionModal({
   const shareAmount = peopleCount && parseInt(peopleCount) > 0 ? orderTotal / parseInt(peopleCount) : 0;
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -845,7 +845,7 @@ function CustomAmountModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

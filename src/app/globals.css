@@ -56,6 +56,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
 }
 
 /* Custom mobile-first styles */
