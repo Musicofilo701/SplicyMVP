@@ -83,6 +83,20 @@ input[type="checkbox"]:checked {
   border-color: #059669;
 }
 
+/* Modal slide-up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
 /* Button hover effects */
 .hover-scale:hover {
   transform: scale(1.02);

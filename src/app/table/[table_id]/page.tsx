@@ -467,8 +467,8 @@ function PartialPaymentModal({
   onCustomAmountSelection: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button onClick={onClose} className="text-[#000000] text-xl">
@@ -525,8 +525,8 @@ function ProductSelectionModal({
     .reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative min-h-[80vh]" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onClose} className="text-[#000000] text-xl">
@@ -619,8 +619,8 @@ function TipModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onClose} className="text-[#000000] text-xl">
@@ -656,29 +656,28 @@ function TipModal({
 
         {/* Custom Options */}
         <div className="mb-8">
-          <div className="mb-4">
-            <label className="block text-[#000000] font-bold mb-2">
-              Altro importo (%)
-            </label>
-            <input
-              type="number"
-              value={customTipPercentage}
-              onChange={handleCustomTipPercentageChange}
-              placeholder="Es. 20"
-              className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
-              style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
-            />
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <button
+              onClick={() => onTipChange(0, 0)}
+              className={`py-3 px-4 rounded-full font-bold border-2 ${
+                tipPercentage === 0 && customTip === 0
+                  ? 'bg-[#013D22] text-white border-[#013D22]'
+                  : 'bg-white text-[#000000] border-gray-300'
+              }`}
+            >
+              Altro importo
+            </button>
+            <button
+              onClick={() => onTipChange(0, 0)}
+              className={`py-3 px-4 rounded-full font-bold border-2 ${
+                tipPercentage === 0 && customTip === 0
+                  ? 'bg-[#013D22] text-white border-[#013D22]'
+                  : 'bg-white text-[#000000] border-gray-300'
+              }`}
+            >
+              Niente mancia
+            </button>
           </div>
-          <button
-            onClick={() => onTipChange(0, 0)}
-            className={`py-3 px-4 rounded-full font-bold border-2 w-full ${
-              tipPercentage === 0 && customTip === 0
-                ? 'bg-[#013D22] text-white border-[#013D22]'
-                : 'bg-white text-[#000000] border-gray-300'
-            }`}
-          >
-            Niente mancia
-          </button>
         </div>
 
         {/* Total Display */}
@@ -711,8 +710,8 @@ function PaymentModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onClose} className="text-[#000000] text-xl">
@@ -761,8 +760,8 @@ function EqualDivisionModal({
   const shareAmount = peopleCount && parseInt(peopleCount) > 0 ? orderTotal / parseInt(peopleCount) : 0;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onClose} className="text-[#000000] text-xl">
@@ -846,8 +845,8 @@ function CustomAmountModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-end justify-center z-50">
+      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onClose} className="text-[#000000] text-xl">
