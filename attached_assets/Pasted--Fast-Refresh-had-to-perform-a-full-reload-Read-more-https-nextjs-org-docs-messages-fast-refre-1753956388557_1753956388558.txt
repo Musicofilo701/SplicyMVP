@@ -1,0 +1,244 @@
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ○ Compiling /table/[table_id] ...
+ ⨯ ./src/app/table/[table_id]/page.tsx
+Error:   × Expected ';', '}' or <eof>
+     ╭─[/home/runner/workspace/src/app/table/[table_id]/page.tsx:834:1]
+ 831 │       const isValidAmount = amount > 0 && amount <= orderTotal;
+ 832 │     
+ 833 │       const handleCustomAmountChangeWrapper = (e: any) => {
+ 834 │ ╭─▶     ```text
+ 835 │ │       const value = e.target.value;
+ 836 │ │       onCustomAmountChange(value);
+ 837 │ │       if (value) {
+ 838 │ │         setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: parseFloat(value) }));
+ 839 │ │       } else {
+ 840 │ │         setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: 0 }));
+ 841 │ │       }
+ 842 │ │     };
+ 843 │ │   
+ 844 │ │     return (
+ 845 │ │       <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+ 846 │ │         <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+ 847 │ │           {/* Header */}
+ 848 │ │           <div className="flex items-center justify-between mb-6">
+ 849 │ │             <button onClick={onClose} className="text-[#000000] text-xl">
+ 850 │ │               ←
+ 851 │ │             </button>
+ 852 │ │             <h2 className="text-lg font-bold text-[#000000]">Importo personalizzato</h2>
+ 853 │ │             <button onClick={onClose} className="text-[#000000] text-xl">
+ 854 │ │               ×
+ 855 │ │             </button>
+ 856 │ │           </div>
+ 857 │ │   
+ 858 │ │           {/* Instructions */}
+ 859 │ │           <p className="text-[#000000] text-center mb-6 text-sm">
+ 860 │ │             Inserisci l'importo che vuoi pagare (massimo {orderTotal.toFixed(2)}€)
+ 861 │ │           </p>
+ 862 │ │   
+ 863 │ │           {/* Input */}
+ 864 │ │           <div className="mb-6">
+ 865 │ │             <label className="block text-[#000000] font-bold mb-2">Importo da pagare</label>
+ 866 │ │             <input
+ 867 │ │               type="number"
+ 868 │ │               value={customAmount}
+ 869 │ │               onChange={handleCustomAmountChangeWrapper}
+ 870 │ │               placeholder="Es. 25.50"
+ 871 │ │               min="0.01"
+ 872 │ │               max={orderTotal}
+ 873 │ │               step="0.01"
+ 874 │ │               className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
+ 875 │ │               style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+ 876 │ │             />
+ 877 │ │             {amount > orderTotal && (
+ 878 │ │               <p className="text-red-500 text-sm mt-2">L'importo non può superare il totale del conto</p>
+ 879 │ │             )}
+ 880 │ │           </div>
+ 881 │ │   
+ 882 │ │           {/* Amount Display */}
+ 883 │ │           {isValidAmount && (
+ 884 │ │             <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
+ 885 │ │               <span className="text-[#000000] font-bold">Importo da pagare</span>
+ 886 │ │               <span className="text-[#000000] font-bold">{amount.toFixed(2)}€</span>
+ 887 │ │             </div>
+ 888 │ │           )}
+ 889 │ │   
+ 890 │ │           {/* Continue Button */}
+ 891 │ │           <button
+ 892 │ │             onClick={onComplete}
+ 893 │ │             disabled={!isValidAmount}
+ 894 │ ├─▶           className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+     · ╰───                      ─
+     · ╰──── This is the expression part of an expression statement
+ 895 │                 isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
+ 896 │               }`}
+ 897 │             >
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/table/[table_id]/page.tsx
+ ⨯ ./src/app/table/[table_id]/page.tsx
+Error:   × Expected ';', '}' or <eof>
+     ╭─[/home/runner/workspace/src/app/table/[table_id]/page.tsx:834:1]
+ 831 │       const isValidAmount = amount > 0 && amount <= orderTotal;
+ 832 │     
+ 833 │       const handleCustomAmountChangeWrapper = (e: any) => {
+ 834 │ ╭─▶     ```text
+ 835 │ │       const value = e.target.value;
+ 836 │ │       onCustomAmountChange(value);
+ 837 │ │       if (value) {
+ 838 │ │         setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: parseFloat(value) }));
+ 839 │ │       } else {
+ 840 │ │         setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: 0 }));
+ 841 │ │       }
+ 842 │ │     };
+ 843 │ │   
+ 844 │ │     return (
+ 845 │ │       <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+ 846 │ │         <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+ 847 │ │           {/* Header */}
+ 848 │ │           <div className="flex items-center justify-between mb-6">
+ 849 │ │             <button onClick={onClose} className="text-[#000000] text-xl">
+ 850 │ │               ←
+ 851 │ │             </button>
+ 852 │ │             <h2 className="text-lg font-bold text-[#000000]">Importo personalizzato</h2>
+ 853 │ │             <button onClick={onClose} className="text-[#000000] text-xl">
+ 854 │ │               ×
+ 855 │ │             </button>
+ 856 │ │           </div>
+ 857 │ │   
+ 858 │ │           {/* Instructions */}
+ 859 │ │           <p className="text-[#000000] text-center mb-6 text-sm">
+ 860 │ │             Inserisci l'importo che vuoi pagare (massimo {orderTotal.toFixed(2)}€)
+ 861 │ │           </p>
+ 862 │ │   
+ 863 │ │           {/* Input */}
+ 864 │ │           <div className="mb-6">
+ 865 │ │             <label className="block text-[#000000] font-bold mb-2">Importo da pagare</label>
+ 866 │ │             <input
+ 867 │ │               type="number"
+ 868 │ │               value={customAmount}
+ 869 │ │               onChange={handleCustomAmountChangeWrapper}
+ 870 │ │               placeholder="Es. 25.50"
+ 871 │ │               min="0.01"
+ 872 │ │               max={orderTotal}
+ 873 │ │               step="0.01"
+ 874 │ │               className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
+ 875 │ │               style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+ 876 │ │             />
+ 877 │ │             {amount > orderTotal && (
+ 878 │ │               <p className="text-red-500 text-sm mt-2">L'importo non può superare il totale del conto</p>
+ 879 │ │             )}
+ 880 │ │           </div>
+ 881 │ │   
+ 882 │ │           {/* Amount Display */}
+ 883 │ │           {isValidAmount && (
+ 884 │ │             <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
+ 885 │ │               <span className="text-[#000000] font-bold">Importo da pagare</span>
+ 886 │ │               <span className="text-[#000000] font-bold">{amount.toFixed(2)}€</span>
+ 887 │ │             </div>
+ 888 │ │           )}
+ 889 │ │   
+ 890 │ │           {/* Continue Button */}
+ 891 │ │           <button
+ 892 │ │             onClick={onComplete}
+ 893 │ │             disabled={!isValidAmount}
+ 894 │ ├─▶           className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+     · ╰───                      ─
+     · ╰──── This is the expression part of an expression statement
+ 895 │                 isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
+ 896 │               }`}
+ 897 │             >
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/table/[table_id]/page.tsx
+ ⨯ ./src/app/table/[table_id]/page.tsx
+Error:   × Expected ';', '}' or <eof>
+     ╭─[/home/runner/workspace/src/app/table/[table_id]/page.tsx:834:1]
+ 831 │       const isValidAmount = amount > 0 && amount <= orderTotal;
+ 832 │     
+ 833 │       const handleCustomAmountChangeWrapper = (e: any) => {
+ 834 │ ╭─▶     ```text
+ 835 │ │       const value = e.target.value;
+ 836 │ │       onCustomAmountChange(value);
+ 837 │ │       if (value) {
+ 838 │ │         setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: parseFloat(value) }));
+ 839 │ │       } else {
+ 840 │ │         setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: 0 }));
+ 841 │ │       }
+ 842 │ │     };
+ 843 │ │   
+ 844 │ │     return (
+ 845 │ │       <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+ 846 │ │         <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+ 847 │ │           {/* Header */}
+ 848 │ │           <div className="flex items-center justify-between mb-6">
+ 849 │ │             <button onClick={onClose} className="text-[#000000] text-xl">
+ 850 │ │               ←
+ 851 │ │             </button>
+ 852 │ │             <h2 className="text-lg font-bold text-[#000000]">Importo personalizzato</h2>
+ 853 │ │             <button onClick={onClose} className="text-[#000000] text-xl">
+ 854 │ │               ×
+ 855 │ │             </button>
+ 856 │ │           </div>
+ 857 │ │   
+ 858 │ │           {/* Instructions */}
+ 859 │ │           <p className="text-[#000000] text-center mb-6 text-sm">
+ 860 │ │             Inserisci l'importo che vuoi pagare (massimo {orderTotal.toFixed(2)}€)
+ 861 │ │           </p>
+ 862 │ │   
+ 863 │ │           {/* Input */}
+ 864 │ │           <div className="mb-6">
+ 865 │ │             <label className="block text-[#000000] font-bold mb-2">Importo da pagare</label>
+ 866 │ │             <input
+ 867 │ │               type="number"
+ 868 │ │               value={customAmount}
+ 869 │ │               onChange={handleCustomAmountChangeWrapper}
+ 870 │ │               placeholder="Es. 25.50"
+ 871 │ │               min="0.01"
+ 872 │ │               max={orderTotal}
+ 873 │ │               step="0.01"
+ 874 │ │               className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
+ 875 │ │               style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+ 876 │ │             />
+ 877 │ │             {amount > orderTotal && (
+ 878 │ │               <p className="text-red-500 text-sm mt-2">L'importo non può superare il totale del conto</p>
+ 879 │ │             )}
+ 880 │ │           </div>
+ 881 │ │   
+ 882 │ │           {/* Amount Display */}
+ 883 │ │           {isValidAmount && (
+ 884 │ │             <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
+ 885 │ │               <span className="text-[#000000] font-bold">Importo da pagare</span>
+ 886 │ │               <span className="text-[#000000] font-bold">{amount.toFixed(2)}€</span>
+ 887 │ │             </div>
+ 888 │ │           )}
+ 889 │ │   
+ 890 │ │           {/* Continue Button */}
+ 891 │ │           <button
+ 892 │ │             onClick={onComplete}
+ 893 │ │             disabled={!isValidAmount}
+ 894 │ ├─▶           className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+     · ╰───                      ─
+     · ╰──── This is the expression part of an expression statement
+ 895 │                 isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
+ 896 │               }`}
+ 897 │             >
+     ╰────
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/table/[table_id]/page.tsx
+ GET /_next/static/webpack/da40b7eb3da1cc5b.webpack.hot-update.json 500 in 2517ms
+ GET /table/TAVOLO_1 500 in 395ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /table/TAVOLO_1 500 in 75ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/runner/workspace/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/home/runner/workspace/.next/cache/webpack/client-development-fallback/0.pack.gz'
