@@ -417,7 +417,7 @@ function PartialPaymentModal({
   onCustomAmountSelection: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -475,7 +475,7 @@ function ProductSelectionModal({
     .reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative min-h-[80vh]" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -554,7 +554,7 @@ function TipModal({
   const total = baseAmount + tipAmount;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -643,7 +643,7 @@ function PaymentModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md mx-4 p-6 relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
