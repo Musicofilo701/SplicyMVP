@@ -664,13 +664,27 @@ function TipModal({
             <div key={percentage} className="relative">
               <button
                 onClick={() => handlePercentageClick(percentage)}
-                className={`w-full py-6 px-4 rounded-2xl font-bold text-lg transition-all ${
+                className={`w-full py-6 px-4 rounded-2xl transition-all flex flex-col items-center justify-center ${
                   tipPercentage === percentage && !showCustomInput && !noTip
                     ? 'bg-[#013D22] text-white'
                     : 'bg-gray-100 text-[#000000] border border-gray-300'
                 }`}
               >
-                {percentage}%
+                <span style={{ fontFamily: 'Helvetica Neue, sans-serif', fontSize: '15px', fontWeight: 'normal', lineHeight: '1.2' }}>
+                  {percentage}%
+                </span>
+                <span 
+                  className="mt-1" 
+                  style={{ 
+                    fontFamily: 'Helvetica Neue, sans-serif', 
+                    fontSize: '15px', 
+                    fontWeight: 'normal', 
+                    lineHeight: '1.2',
+                    opacity: 0.6
+                  }}
+                >
+                  +{(baseAmount * percentage / 100).toFixed(2)}€
+                </span>
               </button>
               {/* "Consigliato" label for 10% */}
               {percentage === 10 && (
@@ -680,12 +694,6 @@ function TipModal({
                   </span>
                 </div>
               )}
-              {/* Tip amount display */}
-              <div className="text-center mt-2">
-                <span className="text-[#000000] text-sm">
-                  {(baseAmount * percentage / 100).toFixed(2)}€
-                </span>
-              </div>
             </div>
           ))}
         </div>
@@ -723,21 +731,31 @@ function TipModal({
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={handleCustomInputClick}
-              className={`py-3 px-4 rounded-2xl font-medium text-sm transition-all ${
+              className={`py-3 px-4 rounded-2xl transition-all ${
                 showCustomInput
                   ? 'bg-[#013D22] text-white'
                   : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
+              style={{ 
+                fontFamily: 'Helvetica Neue, sans-serif', 
+                fontSize: '15px', 
+                fontWeight: 'normal'
+              }}
             >
               Altro importo
             </button>
             <button
               onClick={handleNoTipClick}
-              className={`py-3 px-4 rounded-2xl font-medium text-sm transition-all ${
+              className={`py-3 px-4 rounded-2xl transition-all ${
                 noTip
                   ? 'bg-[#013D22] text-white'
                   : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
+              style={{ 
+                fontFamily: 'Helvetica Neue, sans-serif', 
+                fontSize: '15px', 
+                fontWeight: 'normal'
+              }}
             >
               Niente mancia
             </button>
@@ -746,17 +764,33 @@ function TipModal({
 
         {/* Total Display */}
         <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-          <span className="text-[#000000] font-bold">Il tuo conto</span>
+          <span 
+            className="text-[#000000]" 
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          >
+            Il tuo conto
+          </span>
           <div className="text-right">
-            <span className="text-[#000000] text-sm">{baseAmount.toFixed(2)}€ </span>
-            <span className="text-[#000000] font-bold">{total.toFixed(2)}€</span>
+            <span 
+              className="text-[#000000] text-sm" 
+              style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            >
+              {baseAmount.toFixed(2)}€ 
+            </span>
+            <span 
+              className="text-[#000000]" 
+              style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            >
+              {total.toFixed(2)}€
+            </span>
           </div>
         </div>
 
         {/* Pay Button */}
         <button
           onClick={onComplete}
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg"
+          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
         >
           Paga
         </button>
