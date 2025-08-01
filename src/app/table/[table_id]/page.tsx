@@ -142,7 +142,7 @@ export default function TablePage() {
     if (!order) return 0;
     return order.items
       .filter((item) => paymentSelection.selectedItems.includes(item.id))
-      .reduce((sum, item) => sum + item.price, 0);
+      .reduce((sum, item) => sum + Number(item.price), 0);
   };
 
   const calculateTipAmount = () => {
@@ -972,10 +972,20 @@ function TipModal({
   onComplete: () => void;
   setCustomTipPercentage: (percentage: string) => void;
 }) {
+  const [showCustomInput, setShowCustomInput] = useState(false);
   const tipAmount = tipPercentage > 0 ? (baseAmount * tipPercentage) / 100 : customTip;
   const total = baseAmount + tipAmount;
 
-  const tipOptions = [0, 10, 15, 20];
+  const tipOptions = [5, 10, 15];
+
+  const handleCustomTip = () => {
+    setShowCustomInput(true);
+  };
+
+  const handleNoTip = () => {
+    onTipChange(0, 0);
+    setShowCustomInput(false);
+  };
 
   return (
     <div 
@@ -999,20 +1009,31 @@ function TipModal({
           </button>
         </div>
 
+        {/* Description */}
+        <p
+          className="text-[#000000] mb-6 text-center text-sm"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
+        >
+          Hai ricevuto un ottimo servizio? Lascia una mancia per dimostrare il tuo apprezzamento.
+        </p>
+
         {/* Tip Options */}
         <div className="mb-6">
-          <p className="text-[#000000] mb-4 text-center" style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}>
-            Aggiungi una mancia per il servizio
-          </p>
-          <div className="grid grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-3 gap-3 mb-4">
             {tipOptions.map((tip) => (
               <button
                 key={tip}
-                onClick={() => onTipChange(tip, 0)}
-                className={`py-3 px-4 rounded-xl text-sm ${
-                  tipPercentage === tip
-                    ? "bg-[#a9fdc0] text-[#000000]"
-                    : "bg-gray-100 text-[#000000]"
+                onClick={() => {
+                  onTipChange(tip, 0);
+                  setShowCustomInput(false);
+                }}
+                className={`py-4 px-4 rounded-2xl text-base ${
+                  tipPercentage === tip && !showCustomInput
+                    ? "bg-[#a9fdc0] text-[#000000] border-2 border-[#013D22]"
+                    : "bg-white text-[#000000] border-2 border-gray-300"
                 }`}
                 style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}
               >
@@ -1021,33 +1042,49 @@ function TipModal({
             ))}
           </div>
 
-          {/* Custom tip input */}
-          <div className="mt-4">
-            <input
-              type="number"
-              value={customTipPercentage}
-              onChange={(e) => {
-                setCustomTipPercentage(e.target.value);
-                const percentage = parseFloat(e.target.value) || 0;
-                onTipChange(percentage, 0);
-              }}
-              placeholder="Mancia personalizzata (%)"
-              className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <button
+              onClick={handleCustomTip}
+              className={`py-4 px-4 rounded-2xl text-base ${
+                showCustomInput
+                  ? "bg-[#a9fdc0] text-[#000000] border-2 border-[#013D22]"
+                  : "bg-white text-[#000000] border-2 border-gray-300"
+              }`}
               style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}
-            />
+            >
+              Altro importo
+            </button>
+            <button
+              onClick={handleNoTip}
+              className={`py-4 px-4 rounded-2xl text-base ${
+                tipPercentage === 0 && !showCustomInput
+                  ? "bg-[#a9fdc0] text-[#000000] border-2 border-[#013D22]"
+                  : "bg-white text-[#000000] border-2 border-gray-300"
+              }`}
+              style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}
+            >
+              Niente mancia
+            </button>
           </div>
-        </div>
 
-        {/* Payment Message */}
-        <p
-          className="text-[#000000] text-center mb-8 text-sm"
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "normal",
-          }}
-        >
-          Transazione protetta. I tuoi dati sono al sicuro.
-        </p>
+          {/* Custom tip input */}
+          {showCustomInput && (
+            <div className="mt-4">
+              <input
+                type="number"
+                value={customTipPercentage}
+                onChange={(e) => {
+                  setCustomTipPercentage(e.target.value);
+                  const percentage = parseFloat(e.target.value) || 0;
+                  onTipChange(percentage, 0);
+                }}
+                placeholder="Inserisci percentuale"
+                className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
+                style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Total Display and Pay Button */}
         <div className="-mx-6 -mb-6 mt-6">
@@ -1062,15 +1099,26 @@ function TipModal({
               >
                 Il tuo conto
               </span>
-              <span
-                className="text-[#000000]"
-                style={{
-                  fontFamily: "Helvetica Neue, sans-serif",
-                  fontWeight: "bold",
-                }}
-              >
-                {Number(total).toFixed(2).replace('.', ',')}€
-              </span>
+              <div className="text-right">
+                <span
+                  className="text-[#000000] line-through text-sm mr-2"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "normal",
+                  }}
+                >
+                  {Number(baseAmount).toFixed(2).replace('.', ',')}€
+                </span>
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {Number(total).toFixed(2).replace('.', ',')}€
+                </span>
+              </div>
             </div>
 
             <button
