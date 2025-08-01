@@ -49,6 +49,7 @@ export default function TablePage() {
   const [paymentType, setPaymentType] = useState<'full' | 'partial'>('full');
   const [showEqualDivisionModal, setShowEqualDivisionModal] = useState(false);
   const [showCustomAmountModal, setShowCustomAmountModal] = useState(false);
+  const [modalHistory, setModalHistory] = useState<string[]>([]);
   const [peopleCount, setPeopleCount] = useState('');
   const [customAmount, setCustomAmount] = useState('');
   const [customTipPercentage, setCustomTipPercentage] = useState('');
@@ -69,6 +70,48 @@ export default function TablePage() {
     setPeopleCount('');
     setCustomAmount('');
     setCustomTipPercentage('');
+  };
+
+  const handleGoBack = () => {
+    const newHistory = [...modalHistory];
+    const previousModal = newHistory.pop();
+    setModalHistory(newHistory);
+
+    // Close current modal
+    setShowProductSelection(false);
+    setShowTipModal(false);
+    setShowPaymentModal(false);
+    setShowEqualDivisionModal(false);
+    setShowCustomAmountModal(false);
+
+    // Open previous modal
+    if (previousModal === 'partial') {
+      setShowPartialModal(true);
+    } else if (previousModal === 'productSelection') {
+      setShowProductSelection(true);
+    } else if (previousModal === 'equalDivision') {
+      setShowEqualDivisionModal(true);
+    } else if (previousModal === 'customAmount') {
+      setShowCustomAmountModal(true);
+    } else if (previousModal === 'tip') {
+      setShowTipModal(true);
+    } else if (previousModal === 'payment') {
+      setCurrentView('payment');
+    } else {
+      // If no history, go back to payment view
+      setCurrentView('payment');
+    }
+  };
+
+  const handleCloseAll = () => {
+    setShowPartialModal(false);
+    setShowProductSelection(false);
+    setShowTipModal(false);
+    setShowPaymentModal(false);
+    setShowEqualDivisionModal(false);
+    setShowCustomAmountModal(false);
+    setModalHistory([]);
+    setCurrentView('payment');
   };
 
   const fetchTableOrder = async () => {
@@ -117,6 +160,7 @@ export default function TablePage() {
   const handlePayFull = () => {
     resetAmounts();
     setPaymentType('full');
+    setModalHistory(['payment']);
     setShowTipModal(true);
   };
 
@@ -132,11 +176,13 @@ export default function TablePage() {
       equalDivisionAmount: 0,
       customAmountValue: 0
     }));
+    setModalHistory(prev => [...prev, 'partial']);
     setShowPartialModal(false);
     setShowProductSelection(true);
   };
 
   const handleProductSelectionComplete = () => {
+    setModalHistory(prev => [...prev, 'productSelection']);
     setShowProductSelection(false);
     setShowTipModal(true);
   };
@@ -147,6 +193,7 @@ export default function TablePage() {
       selectedItems: [],
       customAmountValue: 0
     }));
+    setModalHistory(prev => [...prev, 'partial']);
     setShowPartialModal(false);
     setShowEqualDivisionModal(true);
   };
@@ -157,22 +204,26 @@ export default function TablePage() {
       selectedItems: [],
       equalDivisionAmount: 0
     }));
+    setModalHistory(prev => [...prev, 'partial']);
     setShowPartialModal(false);
     setShowCustomAmountModal(true);
   };
 
   const handleEqualDivisionComplete = (amount: number) => {
     setPaymentSelection(prev => ({ ...prev, equalDivisionAmount: amount }));
+    setModalHistory(prev => [...prev, 'equalDivision']);
     setShowEqualDivisionModal(false);
     setShowTipModal(true);
   };
 
   const handleCustomAmountComplete = () => {
+    setModalHistory(prev => [...prev, 'customAmount']);
     setShowCustomAmountModal(false);
     setShowTipModal(true);
   };
 
   const handleTipComplete = () => {
+    setModalHistory(prev => [...prev, 'tip']);
     setShowTipModal(false);
     setShowPaymentModal(true);
   };
@@ -276,7 +327,8 @@ export default function TablePage() {
           order={order}
           selectedItems={paymentSelection.selectedItems}
           onSelectItem={handleSelectItem}
-          onClose={() => setShowProductSelection(false)}
+          onClose={handleCloseAll}
+          onGoBack={handleGoBack}
           onComplete={handleProductSelectionComplete}
         />
       )}
@@ -298,7 +350,8 @@ export default function TablePage() {
           customTip={paymentSelection.customTip}
           customTipPercentage={customTipPercentage}
           onTipChange={(tip, custom) => setPaymentSelection(prev => ({ ...prev, tipPercentage: tip, customTip: custom }))}
-          onClose={() => setShowTipModal(false)}
+          onClose={handleCloseAll}
+          onGoBack={handleGoBack}
           onComplete={handleTipComplete}
           setCustomTipPercentage={setCustomTipPercentage}
         />
@@ -307,7 +360,8 @@ export default function TablePage() {
       {showPaymentModal && (
         <PaymentModal
           total={calculateFinalTotal()}
-          onClose={() => setShowPaymentModal(false)}
+          onClose={handleCloseAll}
+          onGoBack={handleGoBack}
         />
       )}
 
@@ -316,7 +370,8 @@ export default function TablePage() {
           orderTotal={order.orderTotal}
           peopleCount={peopleCount}
           onPeopleCountChange={setPeopleCount}
-          onClose={() => setShowEqualDivisionModal(false)}
+          onClose={handleCloseAll}
+          onGoBack={handleGoBack}
           onComplete={handleEqualDivisionComplete}
         />
       )}
@@ -326,7 +381,8 @@ export default function TablePage() {
           orderTotal={order.orderTotal}
           customAmount={customAmount}
           onCustomAmountChange={setCustomAmount}
-          onClose={() => setShowCustomAmountModal(false)}
+          onClose={handleCloseAll}
+          onGoBack={handleGoBack}
           onComplete={handleCustomAmountComplete}
           setPaymentSelection={setPaymentSelection}
         />
@@ -530,12 +586,14 @@ function ProductSelectionModal({
   selectedItems,
   onSelectItem,
   onClose,
+  onGoBack,
   onComplete
 }: {
   order: Order;
   selectedItems: string[];
   onSelectItem: (itemId: string) => void;
   onClose: () => void;
+  onGoBack: () => void;
   onComplete: () => void;
 }) {
   const selectedTotal = order.items
@@ -547,7 +605,7 @@ function ProductSelectionModal({
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
           <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga i tuoi prodotti</h2>
@@ -559,20 +617,16 @@ function ProductSelectionModal({
         {/* Product List */}
         <div className="space-y-4 flex-1 mb-6">
           {order.items.map((item, index) => (
-            <div key={`${item.id}-${index}`} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
+            <div 
+              key={`${item.id}-${index}`} 
+              onClick={() => onSelectItem(item.id)}
+              className={`flex items-center justify-between p-4 border rounded-xl cursor-pointer transition-all ${
+                selectedItems.includes(item.id)
+                  ? 'bg-[#a9fdc0] border-[#a9fdc0]'
+                  : 'border-gray-200 bg-white'
+              }`}
+            >
               <div className="flex items-center flex-1">
-                <button
-                  onClick={() => onSelectItem(item.id)}
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 ${
-                    selectedItems.includes(item.id)
-                      ? 'bg-[#013D22] border-[#013D22]'
-                      : 'border-gray-300 bg-white'
-                  }`}
-                >
-                  {selectedItems.includes(item.id) && (
-                    <span className="text-white text-xs">✓</span>
-                  )}
-                </button>
                 <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.name}</span>
               </div>
               <div className="text-[#000000] text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.price.toFixed(2)}€</div>
@@ -611,6 +665,7 @@ function TipModal({
   customTipPercentage,
   onTipChange,
   onClose,
+  onGoBack,
   onComplete,
   setCustomTipPercentage
 }: {
@@ -620,6 +675,7 @@ function TipModal({
   customTipPercentage: string;
   onTipChange: (tip: number, custom: number) => void;
   onClose: () => void;
+  onGoBack: () => void;
   onComplete: () => void;
   setCustomTipPercentage: (percentage: string) => void;
 }) {
@@ -663,7 +719,7 @@ function TipModal({
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
           <h2 className="text-lg font-bold text-[#000000]">Premia Luca</h2>
@@ -822,17 +878,19 @@ function TipModal({
 // Payment Modal
 function PaymentModal({
   total,
-  onClose
+  onClose,
+  onGoBack
 }: {
   total: number;
   onClose: () => void;
+  onGoBack: () => void;
 }) {
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
           <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga</h2>
@@ -867,12 +925,14 @@ function EqualDivisionModal({
   peopleCount,
   onPeopleCountChange,
   onClose,
+  onGoBack,
   onComplete
 }: {
   orderTotal: number;
   peopleCount: string;
   onPeopleCountChange: (count: string) => void;
   onClose: () => void;
+  onGoBack: () => void;
   onComplete: (amount: number) => void;
 }) {
   const shareAmount = peopleCount && parseInt(peopleCount) > 0 ? orderTotal / parseInt(peopleCount) : 0;
@@ -882,7 +942,7 @@ function EqualDivisionModal({
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
           <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Dividi in parti uguali</h2>
@@ -940,6 +1000,7 @@ function CustomAmountModal({
   customAmount,
   onCustomAmountChange,
   onClose,
+  onGoBack,
   onComplete,
   setPaymentSelection
 }: {
@@ -947,6 +1008,7 @@ function CustomAmountModal({
   customAmount: string;
   onCustomAmountChange: (amount: string) => void;
   onClose: () => void;
+  onGoBack: () => void;
   onComplete: () => void;
   setPaymentSelection: (paymentSelection: any) => void;
 }) {
@@ -968,7 +1030,7 @@ function CustomAmountModal({
       <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
           <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo personalizzato</h2>
