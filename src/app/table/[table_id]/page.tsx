@@ -1020,7 +1020,7 @@ function TipModal({
               </button>
             ))}
           </div>
-          
+
           {/* Custom tip input */}
           <div className="mt-4">
             <input
@@ -1069,7 +1069,7 @@ function TipModal({
                   fontWeight: "bold",
                 }}
               >
-                {total.toFixed(2).replace('.', ',')}€
+                {Number(total).toFixed(2).replace('.', ',')}€
               </span>
             </div>
 
