@@ -972,6 +972,11 @@ function TipModal({
   onComplete: () => void;
   setCustomTipPercentage: (percentage: string) => void;
 }) {
+  const tipAmount = tipPercentage > 0 ? (baseAmount * tipPercentage) / 100 : customTip;
+  const total = baseAmount + tipAmount;
+
+  const tipOptions = [0, 10, 15, 20];
+
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
@@ -992,6 +997,45 @@ function TipModal({
           <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
+        </div>
+
+        {/* Tip Options */}
+        <div className="mb-6">
+          <p className="text-[#000000] mb-4 text-center" style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}>
+            Aggiungi una mancia per il servizio
+          </p>
+          <div className="grid grid-cols-4 gap-3 mb-4">
+            {tipOptions.map((tip) => (
+              <button
+                key={tip}
+                onClick={() => onTipChange(tip, 0)}
+                className={`py-3 px-4 rounded-xl text-sm ${
+                  tipPercentage === tip
+                    ? "bg-[#a9fdc0] text-[#000000]"
+                    : "bg-gray-100 text-[#000000]"
+                }`}
+                style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}
+              >
+                {tip}%
+              </button>
+            ))}
+          </div>
+          
+          {/* Custom tip input */}
+          <div className="mt-4">
+            <input
+              type="number"
+              value={customTipPercentage}
+              onChange={(e) => {
+                setCustomTipPercentage(e.target.value);
+                const percentage = parseFloat(e.target.value) || 0;
+                onTipChange(percentage, 0);
+              }}
+              placeholder="Mancia personalizzata (%)"
+              className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
+              style={{ fontFamily: "Helvetica Neue, sans-serif", fontWeight: "normal" }}
+            />
+          </div>
         </div>
 
         {/* Payment Message */}
@@ -1030,6 +1074,7 @@ function TipModal({
             </div>
 
             <button
+              onClick={onComplete}
               className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
               style={{
                 fontFamily: "Helvetica Neue, sans-serif",
@@ -1129,7 +1174,7 @@ function EqualDivisionModal({
         </div>
 
         {/* Share Display and Continue Button */}
-        {shareAmount > 0 && (
+        {peopleCount && parseInt(peopleCount) > 0 && (
           <div className="-mx-6 -mb-6 mt-6">
             <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
               <div className="flex justify-between items-center mb-4">
@@ -1149,18 +1194,13 @@ function EqualDivisionModal({
                     fontWeight: "bold",
                   }}
                 >
-                  {shareAmount.toFixed(2).replace('.', ',')}€
+                  {(orderTotal / parseInt(peopleCount)).toFixed(2).replace('.', ',')}€
                 </span>
               </div>
 
               <button
-                onClick={() => onComplete(shareAmount)}
-                disabled={!peopleCount || parseInt(peopleCount) <= 0}
-                className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-                  peopleCount && parseInt(peopleCount) > 0
-                    ? "bg-[#013D22]"
-                    : "bg-gray-400"
-                }`}
+                onClick={() => onComplete(orderTotal / parseInt(peopleCount))}
+                className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
                 style={{
                   fontFamily: "Helvetica Neue, sans-serif",
                   fontWeight: "normal",
@@ -1173,15 +1213,11 @@ function EqualDivisionModal({
         )}
 
         {/* Continue Button for when no amount calculated yet */}
-        {shareAmount <= 0 && (
+        {(!peopleCount || parseInt(peopleCount) <= 0) && (
           <button
-            onClick={() => onComplete(shareAmount)}
-            disabled={!peopleCount || parseInt(peopleCount) <= 0}
-            className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-              peopleCount && parseInt(peopleCount) > 0
-                ? "bg-[#013D22]"
-                : "bg-gray-400"
-            }`}
+            onClick={() => onComplete(0)}
+            disabled={true}
+            className="w-full py-4 px-6 text-white bg-gray-400 rounded-full text-lg"
             style={{
               fontFamily: "Helvetica Neue, sans-serif",
               fontWeight: "normal",
