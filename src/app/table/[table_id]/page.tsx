@@ -620,13 +620,18 @@ function ProductSelectionModal({
             <div 
               key={`${item.id}-${index}`} 
               onClick={() => onSelectItem(item.id)}
-              className={`flex items-center justify-between p-4 border rounded-xl cursor-pointer transition-all ${
-                selectedItems.includes(item.id)
-                  ? 'bg-[#a9fdc0] border-[#a9fdc0]'
-                  : 'border-gray-200 bg-white'
-              }`}
+              className="flex items-center justify-between p-4 border border-gray-200 bg-white rounded-xl cursor-pointer transition-all"
             >
               <div className="flex items-center flex-1">
+                <div className={`w-5 h-5 border-2 rounded-sm mr-3 flex items-center justify-center transition-all ${
+                  selectedItems.includes(item.id)
+                    ? 'bg-[#a9fdc0] border-[#a9fdc0]'
+                    : 'border-gray-300 bg-white'
+                }`}>
+                  {selectedItems.includes(item.id) && (
+                    <div className="w-3 h-3 bg-[#013D22] rounded-sm"></div>
+                  )}
+                </div>
                 <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.name}</span>
               </div>
               <div className="text-[#000000] text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.price.toFixed(2)}€</div>
@@ -752,7 +757,7 @@ function TipModal({
                   className="mt-1" 
                   style={{ 
                     fontFamily: 'Helvetica Neue, sans-serif', 
-                    fontSize: '15px', 
+                    fontSize: '12px', 
                     fontWeight: 'normal', 
                     lineHeight: '1.2',
                     color: '#666666',
