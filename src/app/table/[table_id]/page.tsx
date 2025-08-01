@@ -225,7 +225,7 @@ export default function TablePage() {
         <div className="flex rounded-full overflow-hidden">
           <button
             onClick={() => {setCurrentView('menu'); resetAmounts();}}
-            className={`flex-1 py-3 px-6 text-base font-bold transition-all ${
+            className={`flex-1 py-3 px-6 text-base transition-all ${
               currentView === 'menu'
                 ? 'bg-[#a9fdc0] text-[#000000]'
                 : 'bg-[#013D22] text-white'
@@ -236,7 +236,7 @@ export default function TablePage() {
           </button>
           <button
             onClick={() => {setCurrentView('payment'); resetAmounts();}}
-            className={`flex-1 py-3 px-6 text-base font-bold transition-all ${
+            className={`flex-1 py-3 px-6 text-base transition-all ${
               currentView === 'payment'
                 ? 'bg-[#a9fdc0] text-[#000000]'
                 : 'bg-[#013D22] text-white'
@@ -344,16 +344,28 @@ function MenuView({ order }: { order: Order }) {
     <div className="space-y-4">
       {/* Tab categories */}
       <div className="flex space-x-6 border-b border-[#013D22]">
-        <button className="pb-3 text-[#000000] font-bold border-b-2 border-[#000000]">
+        <button 
+          className="pb-3 text-[#000000] border-b-2 border-[#000000]"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+        >
           Raccomandati
         </button>
-        <button className="pb-3 text-[#000000] opacity-60">
+        <button 
+          className="pb-3 text-[#000000] opacity-60"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+        >
           Antipasti
         </button>
-        <button className="pb-3 text-[#000000] opacity-60">
+        <button 
+          className="pb-3 text-[#000000] opacity-60"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+        >
           Primi
         </button>
-        <button className="pb-3 text-[#000000] opacity-60">
+        <button 
+          className="pb-3 text-[#000000] opacity-60"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+        >
           Secondi
         </button>
       </div>
@@ -363,11 +375,11 @@ function MenuView({ order }: { order: Order }) {
         {order.items.map((item, index) => (
           <div key={`${item.id}-${index}`} className="bg-[#fefff5] rounded-2xl p-4 flex justify-between items-start shadow-sm border border-gray-100">
             <div className="flex-1">
-              <h3 className="font-bold text-[#000000] text-lg mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>{item.name}</h3>
-              <p className="text-[#000000] text-sm leading-relaxed mb-3" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+              <h3 className="text-[#000000] text-lg mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{item.name}</h3>
+              <p className="text-[#000000] text-sm leading-relaxed mb-3" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
                 {item.description || "pane bun al pomodoro, pulled pork, cipolla di tropea caramellata, stracciatella, scamorza fusa affumicata, salsa BBQ e rucola selvatica. Aggiunta di Bacon possibile"}
               </p>
-              <p className="text-[#000000] font-bold text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>{item.price.toFixed(2)}€</p>
+              <p className="text-[#000000] text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{item.price.toFixed(2)}€</p>
             </div>
             {index === 0 && (
               <div className="w-20 h-20 bg-[#013D22] rounded-xl ml-4 flex-shrink-0"></div>
@@ -378,7 +390,10 @@ function MenuView({ order }: { order: Order }) {
 
       {/* Floating Action Button */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
-        <button className="bg-[#013D22] text-white px-6 py-3 rounded-full font-bold shadow-lg">
+        <button 
+          className="bg-[#013D22] text-white px-6 py-3 rounded-full shadow-lg"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+        >
           Paga ora online
         </button>
       </div>
@@ -400,10 +415,10 @@ function PaymentView({
     <div className="space-y-6">
       {/* Order Total Section */}
       <div className="text-center">
-        <h2 className="text-lg font-bold text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+        <h2 className="text-lg text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
           Conto totale
         </h2>
-        <div className="text-4xl font-bold text-[#000000] mb-1" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+        <div className="text-4xl text-[#000000] mb-1" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
           {order.orderTotal.toFixed(2)}€
         </div>
       </div>
@@ -414,15 +429,15 @@ function PaymentView({
           <div key={`${item.id}-${index}`} className="flex justify-between items-center py-2">
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-[#000000] rounded-full"></div>
-              <span className="text-[#000000] font-medium" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+              <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
                 {item.name}
               </span>
             </div>
             <div className="text-right">
-              <span className="text-[#000000] text-sm mr-2" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+              <span className="text-[#000000] text-sm mr-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
                 {item.price < 10 ? `${item.price.toFixed(2)}€` : `${Math.floor(item.price)},${(item.price % 1 * 100).toFixed(0).padStart(2, '0')}€`}
               </span>
-              <span className="text-[#000000] font-bold" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+              <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
                 {item.price < 10 ? `${item.price.toFixed(2)}€` : `${Math.floor(item.price)},${(item.price % 1 * 100).toFixed(0).padStart(2, '0')}€`}
               </span>
             </div>
@@ -435,8 +450,8 @@ function PaymentView({
         {/* Pay Full Amount Button */}
         <button
           onClick={onPayFull}
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg transition-colors hover:bg-[#013D22]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
         >
           Paga il totale del conto
         </button>
@@ -444,8 +459,8 @@ function PaymentView({
         {/* Pay Partial Amount Button */}
         <button
           onClick={onPayPartial}
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg transition-colors hover:bg-[#013D22]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
         >
           Paga una parte
         </button>
@@ -474,7 +489,7 @@ function PartialPaymentModal({
           <button onClick={onClose} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg font-bold text-[#000000]">Paga una parte</h2>
+          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga una parte</h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
@@ -484,19 +499,22 @@ function PartialPaymentModal({
         <div className="space-y-4">
           <button
             onClick={onEqualDivision}
-            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base"
+            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
           >
             Dividi in parti uguali
           </button>
           <button
             onClick={onCustomAmountSelection}
-            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base"
+            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
           >
             Scegli un importo personalizzato
           </button>
           <button
             onClick={onProductSelection}
-            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-base"
+            className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
           >
             Paga i prodotti che hai mangiato
           </button>
@@ -532,7 +550,7 @@ function ProductSelectionModal({
           <button onClick={onClose} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg font-bold text-[#000000]">Paga i tuoi prodotti</h2>
+          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga i tuoi prodotti</h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
@@ -543,8 +561,8 @@ function ProductSelectionModal({
           {order.items.map((item, index) => (
             <div key={`${item.id}-${index}`} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
               <div className="flex-1">
-                <span className="text-[#000000] font-medium">{item.name}</span>
-                <div className="text-[#000000] text-sm">{item.price.toFixed(2)}€</div>
+                <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.name}</span>
+                <div className="text-[#000000] text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.price.toFixed(2)}€</div>
               </div>
               <button
                 onClick={() => onSelectItem(item.id)}
@@ -565,16 +583,17 @@ function ProductSelectionModal({
         {/* Bottom Section */}
         <div className="mt-auto">
           <div className="bg-[#a9fdc0] rounded-xl p-4 mb-4 flex justify-between items-center">
-            <span className="text-[#000000] font-bold">Il tuo conto</span>
-            <span className="text-[#000000] font-bold">{selectedTotal.toFixed(2)}€</span>
+            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Il tuo conto</span>
+            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{selectedTotal.toFixed(2)}€</span>
           </div>
 
           <button
             onClick={onComplete}
             disabled={selectedItems.length === 0}
-            className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+            className={`w-full py-4 px-6 text-white rounded-full text-lg ${
               selectedItems.length === 0 ? 'bg-gray-400' : 'bg-[#013D22]'
             }`}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
           >
             Paga
           </button>
@@ -666,7 +685,7 @@ function TipModal({
                 onClick={() => handlePercentageClick(percentage)}
                 className={`w-full py-6 px-4 rounded-2xl transition-all flex flex-col items-center justify-center ${
                   tipPercentage === percentage && !showCustomInput && !noTip
-                    ? 'bg-[#013D22] text-white'
+                    ? 'bg-[#B3E5FC] text-[#000000] border border-[#81D4FA]'
                     : 'bg-gray-100 text-[#000000] border border-gray-300'
                 }`}
               >
@@ -733,7 +752,7 @@ function TipModal({
               onClick={handleCustomInputClick}
               className={`py-3 px-4 rounded-2xl transition-all ${
                 showCustomInput
-                  ? 'bg-[#013D22] text-white'
+                  ? 'bg-[#B3E5FC] text-[#000000] border border-[#81D4FA]'
                   : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
               style={{ 
@@ -748,7 +767,7 @@ function TipModal({
               onClick={handleNoTipClick}
               className={`py-3 px-4 rounded-2xl transition-all ${
                 noTip
-                  ? 'bg-[#013D22] text-white'
+                  ? 'bg-[#B3E5FC] text-[#000000] border border-[#81D4FA]'
                   : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
               style={{ 
@@ -815,25 +834,25 @@ function PaymentModal({
           <button onClick={onClose} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg font-bold text-[#000000]">Paga</h2>
+          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga</h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
         </div>
 
         {/* Payment Message */}
-        <p className="text-[#000000] text-center mb-8 text-sm">
+        <p className="text-[#000000] text-center mb-8 text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
           Transazione protetta. I tuoi dati sono al sicuro.
         </p>
 
         {/* Total Display */}
         <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-          <span className="text-[#000000] font-bold">Il tuo conto</span>
-          <span className="text-[#000000] font-bold">{total.toFixed(2)}€</span>
+          <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Il tuo conto</span>
+          <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{total.toFixed(2)}€</span>
         </div>
 
         {/* Pay Button */}
-        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full font-bold text-lg">
+        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
           Paga
         </button>
       </div>
@@ -865,36 +884,36 @@ function EqualDivisionModal({
           <button onClick={onClose} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg font-bold text-[#000000]">Dividi in parti uguali</h2>
+          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Dividi in parti uguali</h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
         </div>
 
         {/* Instructions */}
-        <p className="text-[#000000] text-center mb-6 text-sm">
+        <p className="text-[#000000] text-center mb-6 text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
           Inserisci il numero di persone per dividere il conto totale di {orderTotal.toFixed(2)}€
         </p>
 
         {/* Input */}
         <div className="mb-6">
-          <label className="block text-[#000000] font-bold mb-2">Numero di persone</label>
+          <label className="block text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Numero di persone</label>
           <input
             type="number"
             value={peopleCount}
             onChange={(e) => onPeopleCountChange(e.target.value)}
             placeholder="Es. 4"
             min="1"
-            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
           />
         </div>
 
         {/* Share Display */}
         {shareAmount > 0 && (
           <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-            <span className="text-[#000000] font-bold">La tua parte</span>
-            <span className="text-[#000000] font-bold">{shareAmount.toFixed(2)}€</span>
+            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>La tua parte</span>
+            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{shareAmount.toFixed(2)}€</span>
           </div>
         )}
 
@@ -902,9 +921,10 @@ function EqualDivisionModal({
         <button
           onClick={() => onComplete(shareAmount)}
           disabled={!peopleCount || parseInt(peopleCount) <= 0}
-          className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+          className={`w-full py-4 px-6 text-white rounded-full text-lg ${
             peopleCount && parseInt(peopleCount) > 0 ? 'bg-[#013D22]' : 'bg-gray-400'
           }`}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
         >
           Continua
         </button>
@@ -950,20 +970,20 @@ function CustomAmountModal({
           <button onClick={onClose} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg font-bold text-[#000000]">Importo personalizzato</h2>
+          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo personalizzato</h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
         </div>
 
         {/* Instructions */}
-        <p className="text-[#000000] text-center mb-6 text-sm">
+        <p className="text-[#000000] text-center mb-6 text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
           Inserisci l'importo che vuoi pagare (massimo {orderTotal.toFixed(2)}€)
         </p>
 
         {/* Input */}
         <div className="mb-6">
-          <label className="block text-[#000000] font-bold mb-2">Importo da pagare</label>
+          <label className="block text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo da pagare</label>
           <input
             type="number"
             value={customAmount}
@@ -972,19 +992,19 @@ function CustomAmountModal({
             min="0.01"
             max={orderTotal}
             step="0.01"
-            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+            className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
           />
           {amount > orderTotal && (
-            <p className="text-red-500 text-sm mt-2">L'importo non può superare il totale del conto</p>
+            <p className="text-red-500 text-sm mt-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>L'importo non può superare il totale del conto</p>
           )}
         </div>
 
         {/* Amount Display */}
         {isValidAmount && (
           <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-            <span className="text-[#000000] font-bold">Importo da pagare</span>
-            <span className="text-[#000000] font-bold">{amount.toFixed(2)}€</span>
+            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo da pagare</span>
+            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{amount.toFixed(2)}€</span>
           </div>
         )}
 
@@ -992,9 +1012,10 @@ function CustomAmountModal({
         <button
           onClick={onComplete}
           disabled={!isValidAmount}
-          className={`w-full py-4 px-6 text-white rounded-full font-bold text-lg ${
+          className={`w-full py-4 px-6 text-white rounded-full text-lg ${
             isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
           }`}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
         >
           Continua
         </button>
