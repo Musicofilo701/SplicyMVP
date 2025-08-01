@@ -685,6 +685,7 @@ function PartialPaymentModal({
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
       onClick={onClose}
+      style={{ overflow: 'hidden' }}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -764,6 +765,14 @@ function ProductSelectionModal({
   onGoBack: () => void;
   onComplete: () => void;
 }) {
+  // Prevent body scroll when modal is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   // Group identical items together
   const groupedItems = order.items.reduce((acc, item) => {
     const existingGroup = acc.find(group => group.name === item.name && Number(group.price) === Number(item.price));
@@ -814,6 +823,7 @@ function ProductSelectionModal({
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
       onClick={onClose}
+      style={{ overflow: 'hidden' }}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md relative h-[80vh] animate-slide-up flex flex-col"
@@ -915,7 +925,7 @@ function ProductSelectionModal({
                     fontWeight: "bold",
                   }}
                 >
-                  {selectedTotal.toFixed(2).replace('.', ',')}€
+                  {Number(selectedTotal).toFixed(2).replace('.', ',')}€
                 </span>
               </div>
             </div>
@@ -962,46 +972,11 @@ function TipModal({
   onComplete: () => void;
   setCustomTipPercentage: (percentage: string) => void;
 }) {
-  const [showCustomInput, setShowCustomInput] = useState(false);
-  const [noTip, setNoTip] = useState(false);
-
-  const tipAmount =
-    tipPercentage > 0 ? (baseAmount * tipPercentage) / 100 : customTip;
-  const total = baseAmount + tipAmount;
-
-  const handlePercentageClick = (percentage: number) => {
-    onTipChange(percentage, 0);
-    setShowCustomInput(false);
-    setNoTip(false);
-  };
-
-  const handleCustomInputClick = () => {
-    setShowCustomInput(true);
-    setNoTip(false);
-    onTipChange(0, 0);
-  };
-
-  const handleNoTipClick = () => {
-    setNoTip(true);
-    setShowCustomInput(false);
-    onTipChange(0, 0);
-  };
-
-  const handleCustomTipPercentageChange = (e: any) => {
-    const value = e.target.value;
-    setCustomTipPercentage(value);
-    if (value && parseFloat(value) > 0) {
-      const percentage = parseFloat(value);
-      onTipChange(percentage, 0);
-    } else {
-      onTipChange(0, 0);
-    }
-  };
-
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
       onClick={onClose}
+      style={{ overflow: 'hidden' }}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -1014,220 +989,6 @@ function TipModal({
             ←
           </button>
           <h2 className="text-lg font-bold text-[#000000]">Premia Luca</h2>
-          <button onClick={onClose} className="text-[#000000] text-2xl">
-            ×
-          </button>
-        </div>
-
-        {/* Tip Message */}
-        <p className="text-[#000000] text-center mb-6 text-sm">
-          Hai ricevuto un ottimo servizio? Lascia una mancia per dimostrare il
-          tuo apprezzamento.
-        </p>
-
-        {/* Tip Options - Larger buttons */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {[5, 10, 15].map((percentage) => (
-            <div key={percentage} className="relative">
-              <button
-                onClick={() => handlePercentageClick(percentage)}
-                className={`w-full py-6 px-4 rounded-2xl transition-all flex flex-col items-center justify-center ${
-                  tipPercentage === percentage && !showCustomInput && !noTip
-                    ? "bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]"
-                    : "bg-gray-100 text-[#000000] border border-gray-300"
-                }`}
-              >
-                <span
-                  style={{
-                    fontFamily: "Helvetica Neue, sans-serif",
-                    fontSize: "15px",
-                    fontWeight: "normal",
-                    lineHeight: "1.2",
-                    color: "#000000",
-                  }}
-                >
-                  {percentage}%
-                </span>
-                <span
-                  className="mt-1"
-                  style={{
-                    fontFamily: "Helvetica Neue, sans-serif",
-                    fontSize: "12px",
-                    fontWeight: "normal",
-                    lineHeight: "1.2",
-                    color: "#666666",
-                    opacity: 0.8,
-                  }}
-                >
-                  +{((baseAmount * percentage) / 100).toFixed(2)}€
-                </span>
-              </button>
-              {/* "Consigliato" label for 10% */}
-              {percentage === 10 && (
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-[#013D22] text-white text-xs px-2 py-1 roundedfull font-bold">
-                    Consigliato
-                  </span>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Custom Input Section */}
-        {showCustomInput && (
-          <div className="mb-6">
-            <div className="flex items-center space-x-3">
-              <input
-                type="number"
-                value={customTipPercentage}
-                onChange={handleCustomTipPercentageChange}
-                placeholder="Es. 12"
-                min="0"
-                max="100"
-                step="0.1"
-                className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium text-center"
-                style={{ fontFamily: "Helvetica Neue, sans-serif" }}
-                autoFocus
-              />
-              <span className="text-[#000000] font-bold text-lg">%</span>
-            </div>
-            {customTipPercentage && parseFloat(customTipPercentage) > 0 && (
-              <div className="text-center mt-2">
-                <span className="text-[#000000] text-sm">
-                  {(
-                    (baseAmount * parseFloat(customTipPercentage)) /
-                    100
-                  ).toFixed(2)}
-                  €
-                </span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Custom Options - Smaller buttons */}
-        <div className="mb-8">
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={handleCustomInputClick}
-              className={`py-3 px-4 rounded-2xl transition-all ${
-                showCustomInput
-                  ? "bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]"
-                  : "bg-gray-100 text-[#000000] border border-gray-300"
-              }`}
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontSize: "15px",
-                fontWeight: "normal",
-              }}
-            >
-              Altro importo
-            </button>
-            <button
-              onClick={handleNoTipClick}
-              className={`py-3 px-4 rounded-2xl transition-all ${
-                noTip
-                  ? "bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]"
-                  : "bg-gray-100 text-[#000000] border border-gray-300"
-              }`}
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontSize: "15px",
-                fontWeight: "normal",
-              }}
-            >
-              Niente mancia
-            </button>
-          </div>
-        </div>
-
-        {/* Total Display and Pay Button */}
-        <div className="-mx-6 -mb-6 mt-6">
-          <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
-            <div className="flex justify-between items-center mb-4">
-              <span
-                className="text-[#000000]"
-                style={{
-                  fontFamily: "Helvetica Neue, sans-serif",
-                  fontWeight: "bold",
-                }}
-              >
-                Il tuo conto
-              </span>
-              <div className="text-right flex items-center space-x-3">
-                <span
-                  className="text-[#000000] text-sm"
-                  style={{
-                    fontFamily: "Helvetica Neue, sans-serif",
-                    fontWeight: "normal",
-                  }}
-                >
-                  {baseAmount.toFixed(2).replace('.', ',')}€
-                </span>
-                <span
-                  className="text-[#000000] text-lg"
-                  style={{
-                    fontFamily: "Helvetica Neue, sans-serif",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {total.toFixed(2).replace('.', ',')}€
-                </span>
-              </div>
-            </div>
-
-            <button
-              onClick={onComplete}
-              className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "normal",
-              }}
-            >
-              Paga
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Payment Modal
-function PaymentModal({
-  total,
-  onClose,
-  onGoBack,
-}: {
-  total: number;
-  onClose: () => void;
-  onGoBack: () => void;
-}) {
-  return (
-    <div 
-      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
-        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <button onClick={onGoBack} className="text-[#000000] text-2xl">
-            ←
-          </button>
-          <h2
-            className="text-lg text-[#000000]"
-            style={{
-              fontFamily: "Helvetica Neue, sans-serif",
-              fontWeight: "bold",
-            }}
-          >
-            Paga
-          </h2>
           <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
@@ -1300,15 +1061,11 @@ function EqualDivisionModal({
   onGoBack: () => void;
   onComplete: (amount: number) => void;
 }) {
-  const shareAmount =
-    peopleCount && parseInt(peopleCount) > 0
-      ? orderTotal / parseInt(peopleCount)
-      : 0;
-
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
       onClick={onClose}
+      style={{ overflow: 'hidden' }}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -1477,6 +1234,7 @@ function CustomAmountModal({
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
       onClick={onClose}
+      style={{ overflow: 'hidden' }}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
