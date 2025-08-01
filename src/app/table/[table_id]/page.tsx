@@ -551,9 +551,9 @@ function PaymentView({
   return (
     <div className="space-y-6">
       {/* Order Total Section */}
-      <div className="text-center">
+      <div className="mb-8">
         <h2
-          className="text-lg text-[#000000] mb-2"
+          className="text-lg text-[#000000] mb-4"
           style={{
             fontFamily: "Helvetica Neue, sans-serif",
             fontWeight: "bold",
@@ -562,30 +562,31 @@ function PaymentView({
           Conto totale
         </h2>
         <div
-          className="text-4xl text-[#000000] mb-1"
+          className="text-4xl text-[#000000] mb-6"
           style={{
             fontFamily: "Helvetica Neue, sans-serif",
             fontWeight: "bold",
           }}
         >
-          {order.orderTotal.toFixed(2)}€
+          {order.orderTotal.toFixed(2).replace('.', ',')}€
         </div>
       </div>
 
       {/* Order Items List */}
-      <div className="space-y-3">
+      <div className="space-y-4 mb-8">
         {order.items.map((item, index) => (
           <div
             key={`${item.id}-${index}`}
-            className="flex justify-between items-center py-2"
+            className="flex justify-between items-center"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-[#000000] rounded-full"></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
               <span
                 className="text-[#000000]"
                 style={{
                   fontFamily: "Helvetica Neue, sans-serif",
                   fontWeight: "normal",
+                  fontSize: "16px",
                 }}
               >
                 {item.name}
@@ -593,26 +594,14 @@ function PaymentView({
             </div>
             <div className="text-right">
               <span
-                className="text-[#000000] text-sm mr-2"
-                style={{
-                  fontFamily: "Helvetica Neue, sans-serif",
-                  fontWeight: "normal",
-                }}
-              >
-                {item.price < 10
-                  ? `${item.price.toFixed(2)}€`
-                  : `${Math.floor(item.price)},${((item.price % 1) * 100).toFixed(0).padStart(2, "0")}€`}
-              </span>
-              <span
                 className="text-[#000000]"
                 style={{
                   fontFamily: "Helvetica Neue, sans-serif",
                   fontWeight: "bold",
+                  fontSize: "16px",
                 }}
               >
-                {item.price < 10
-                  ? `${item.price.toFixed(2)}€`
-                  : `${Math.floor(item.price)},${((item.price % 1) * 100).toFixed(0).padStart(2, "0")}€`}
+                {item.price.toFixed(2).replace('.', ',')}€
               </span>
             </div>
           </div>
