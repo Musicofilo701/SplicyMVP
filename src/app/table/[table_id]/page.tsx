@@ -548,25 +548,44 @@ function PaymentView({
   onPayFull: () => void;
   onPayPartial: () => void;
 }) {
+  // Group identical items together
+  const groupedItems = order.items.reduce((acc, item) => {
+    const existingGroup = acc.find(group => group.name === item.name && group.price === item.price);
+    if (existingGroup) {
+      existingGroup.count += 1;
+      existingGroup.items.push(item);
+    } else {
+      acc.push({
+        name: item.name,
+        price: item.price,
+        count: 1,
+        items: [item]
+      });
+    }
+    return acc;
+  }, [] as Array<{name: string, price: number, count: number, items: MenuItem[]}>);
+
   return (
     <div className="space-y-6">
       {/* Order Total Section */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2
-            className="text-base text-[#000000]"
+            className="text-[#000000]"
             style={{
               fontFamily: "Helvetica Neue, sans-serif",
               fontWeight: "bold",
+              fontSize: "16px",
             }}
           >
             Conto totale
           </h2>
           <div
-            className="text-2xl text-[#000000]"
+            className="text-[#000000]"
             style={{
               fontFamily: "Helvetica Neue, sans-serif",
               fontWeight: "bold",
+              fontSize: "16px",
             }}
           >
             {order.orderTotal.toFixed(2).replace('.', ',')}€
@@ -576,9 +595,9 @@ function PaymentView({
 
       {/* Order Items List */}
       <div className="space-y-4 mb-8">
-        {order.items.map((item, index) => (
+        {groupedItems.map((group, index) => (
           <div
-            key={`${item.id}-${index}`}
+            key={`${group.name}-${index}`}
             className="flex justify-between items-center"
           >
             <div className="flex items-center space-x-3">
@@ -590,7 +609,7 @@ function PaymentView({
                     fontWeight: "bold",
                   }}
                 >
-                  {index + 1}
+                  {group.count}
                 </span>
               </div>
               <span
@@ -601,7 +620,7 @@ function PaymentView({
                   fontSize: "16px",
                 }}
               >
-                {item.name}
+                {group.name}
               </span>
             </div>
             <div className="text-right">
@@ -613,7 +632,7 @@ function PaymentView({
                   fontSize: "16px",
                 }}
               >
-                {item.price.toFixed(2).replace('.', ',')}€
+                {(group.price * group.count).toFixed(2).replace('.', ',')}€
               </span>
             </div>
           </div>
@@ -745,9 +764,51 @@ function ProductSelectionModal({
   onGoBack: () => void;
   onComplete: () => void;
 }) {
+  // Group identical items together
+  const groupedItems = order.items.reduce((acc, item) => {
+    const existingGroup = acc.find(group => group.name === item.name && group.price === item.price);
+    if (existingGroup) {
+      existingGroup.count += 1;
+      existingGroup.items.push(item);
+    } else {
+      acc.push({
+        name: item.name,
+        price: item.price,
+        count: 1,
+        items: [item]
+      });
+    }
+    return acc;
+  }, [] as Array<{name: string, price: number, count: number, items: MenuItem[]}>);
+
   const selectedTotal = order.items
     .filter((item) => selectedItems.includes(item.id))
     .reduce((sum, item) => sum + item.price, 0);
+
+  const handleGroupSelection = (group: {name: string, price: number, count: number, items: MenuItem[]}) => {
+    // Check if any item in this group is selected
+    const isAnySelected = group.items.some(item => selectedItems.includes(item.id));
+    
+    if (isAnySelected) {
+      // Deselect all items in this group
+      group.items.forEach(item => {
+        if (selectedItems.includes(item.id)) {
+          onSelectItem(item.id);
+        }
+      });
+    } else {
+      // Select all items in this group
+      group.items.forEach(item => {
+        if (!selectedItems.includes(item.id)) {
+          onSelectItem(item.id);
+        }
+      });
+    }
+  };
+
+  const isGroupSelected = (group: {name: string, price: number, count: number, items: MenuItem[]}) => {
+    return group.items.every(item => selectedItems.includes(item.id));
+  };
 
   return (
     <div 
@@ -780,30 +841,43 @@ function ProductSelectionModal({
 
         {/* Product List */}
         <div className="space-y-4 flex-1 mb-6">
-          {order.items.map((item, index) => (
+          {groupedItems.map((group, index) => (
             <div
-              key={`${item.id}-${index}`}
-              onClick={() => onSelectItem(item.id)}
+              key={`${group.name}-${index}`}
+              onClick={() => handleGroupSelection(group)}
               className="flex items-center justify-between p-4 border border-gray-200 bg-white rounded-xl cursor-pointer transition-all"
             >
               <div className="flex items-center flex-1">
                 <div
                   className={`w-5 h-5 border-2 rounded-sm mr-3 flex items-center justify-center transition-all ${
-                    selectedItems.includes(item.id)
+                    isGroupSelected(group)
                       ? "bg-[#a9fdc0] border-[#a9fdc0]"
                       : "border-gray-300 bg-white"
                   }`}
                 >
                 </div>
-                <span
-                  className="text-[#000000]"
-                  style={{
-                    fontFamily: "Helvetica Neue, sans-serif",
-                    fontWeight: "normal",
-                  }}
-                >
-                  {item.name}
-                </span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+                    <span
+                      className="text-white text-xs"
+                      style={{
+                        fontFamily: "Helvetica Neue, sans-serif",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {group.count}
+                    </span>
+                  </div>
+                  <span
+                    className="text-[#000000]"
+                    style={{
+                      fontFamily: "Helvetica Neue, sans-serif",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    {group.name}
+                  </span>
+                </div>
               </div>
               <div
                 className="text-[#000000] text-sm"
@@ -812,7 +886,7 @@ function ProductSelectionModal({
                   fontWeight: "normal",
                 }}
               >
-                {item.price.toFixed(2)}€
+                {(group.price * group.count).toFixed(2)}€
               </div>
             </div>
           ))}
