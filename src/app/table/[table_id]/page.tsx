@@ -819,41 +819,45 @@ function ProductSelectionModal({
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-auto">
-          <div className="bg-[#a9fdc0] rounded-xl p-4 mb-4 flex justify-between items-center">
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              Il tuo conto
-            </span>
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              {selectedTotal.toFixed(2)}€
-            </span>
-          </div>
+        <div className="mt-auto -mx-6 -mb-6">
+          <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
+            <div className="flex justify-between items-center mb-4">
+              <span
+                className="text-[#000000]"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                Il tuo conto
+              </span>
+              <div className="flex items-center space-x-3">
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {selectedTotal.toFixed(2).replace('.', ',')}€
+                </span>
+              </div>
+            </div>
 
-          <button
-            onClick={onComplete}
-            disabled={selectedItems.length === 0}
-            className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-              selectedItems.length === 0 ? "bg-gray-400" : "bg-[#013D22]"
-            }`}
-            style={{
-              fontFamily: "Helvetica Neue, sans-serif",
-              fontWeight: "normal",
-            }}
-          >
-            Paga
-          </button>
+            <button
+              onClick={onComplete}
+              disabled={selectedItems.length === 0}
+              className={`w-full py-4 px-6 text-white rounded-full text-lg ${
+                selectedItems.length === 0 ? "bg-gray-400" : "bg-[#013D22]"
+              }`}
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "normal",
+              }}
+            >
+              Paga
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1062,50 +1066,53 @@ function TipModal({
           </div>
         </div>
 
-        {/* Total Display */}
-        <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-          <span
-            className="text-[#000000]"
-            style={{
-              fontFamily: "Helvetica Neue, sans-serif",
-              fontWeight: "bold",
-            }}
-          >
-            Il tuo conto
-          </span>
-          <div className="text-right">
-            <span
-              className="text-[#000000] text-sm"
+        {/* Total Display and Pay Button */}
+        <div className="-mx-6 -mb-6 mt-6">
+          <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
+            <div className="flex justify-between items-center mb-4">
+              <span
+                className="text-[#000000]"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                Il tuo conto
+              </span>
+              <div className="text-right flex items-center space-x-3">
+                <span
+                  className="text-[#000000] text-sm"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "normal",
+                  }}
+                >
+                  {baseAmount.toFixed(2).replace('.', ',')}€
+                </span>
+                <span
+                  className="text-[#000000] text-lg"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {total.toFixed(2).replace('.', ',')}€
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={onComplete}
+              className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
               style={{
                 fontFamily: "Helvetica Neue, sans-serif",
                 fontWeight: "normal",
               }}
             >
-              {baseAmount.toFixed(2)}€
-            </span>
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              {total.toFixed(2)}€
-            </span>
+              Paga
+            </button>
           </div>
         </div>
-
-        {/* Pay Button */}
-        <button
-          onClick={onComplete}
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "normal",
-          }}
-        >
-          Paga
-        </button>
       </div>
     </div>
   );
@@ -1161,38 +1168,41 @@ function PaymentModal({
           Transazione protetta. I tuoi dati sono al sicuro.
         </p>
 
-        {/* Total Display */}
-        <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-          <span
-            className="text-[#000000]"
-            style={{
-              fontFamily: "Helvetica Neue, sans-serif",
-              fontWeight: "bold",
-            }}
-          >
-            Il tuo conto
-          </span>
-          <span
-            className="text-[#000000]"
-            style={{
-              fontFamily: "Helvetica Neue, sans-serif",
-              fontWeight: "bold",
-            }}
-          >
-            {total.toFixed(2)}€
-          </span>
-        </div>
+        {/* Total Display and Pay Button */}
+        <div className="-mx-6 -mb-6 mt-6">
+          <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
+            <div className="flex justify-between items-center mb-4">
+              <span
+                className="text-[#000000]"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                Il tuo conto
+              </span>
+              <span
+                className="text-[#000000]"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                {total.toFixed(2).replace('.', ',')}€
+              </span>
+            </div>
 
-        {/* Pay Button */}
-        <button
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "normal",
-          }}
-        >
-          Paga
-        </button>
+            <button
+              className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "normal",
+              }}
+            >
+              Paga
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -1285,46 +1295,68 @@ function EqualDivisionModal({
           />
         </div>
 
-        {/* Share Display */}
+        {/* Share Display and Continue Button */}
         {shareAmount > 0 && (
-          <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              La tua parte
-            </span>
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              {shareAmount.toFixed(2)}€
-            </span>
+          <div className="-mx-6 -mb-6 mt-6">
+            <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
+              <div className="flex justify-between items-center mb-4">
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  La tua parte
+                </span>
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {shareAmount.toFixed(2).replace('.', ',')}€
+                </span>
+              </div>
+
+              <button
+                onClick={() => onComplete(shareAmount)}
+                disabled={!peopleCount || parseInt(peopleCount) <= 0}
+                className={`w-full py-4 px-6 text-white rounded-full text-lg ${
+                  peopleCount && parseInt(peopleCount) > 0
+                    ? "bg-[#013D22]"
+                    : "bg-gray-400"
+                }`}
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "normal",
+                }}
+              >
+                Continua
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Continue Button */}
-        <button
-          onClick={() => onComplete(shareAmount)}
-          disabled={!peopleCount || parseInt(peopleCount) <= 0}
-          className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-            peopleCount && parseInt(peopleCount) > 0
-              ? "bg-[#013D22]"
-              : "bg-gray-400"
-          }`}
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "normal",
-          }}
-        >
-          Continua
-        </button>
+        {/* Continue Button for when no amount calculated yet */}
+        {shareAmount <= 0 && (
+          <button
+            onClick={() => onComplete(shareAmount)}
+            disabled={!peopleCount || parseInt(peopleCount) <= 0}
+            className={`w-full py-4 px-6 text-white rounded-full text-lg ${
+              peopleCount && parseInt(peopleCount) > 0
+                ? "bg-[#013D22]"
+                : "bg-gray-400"
+            }`}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
+          >
+            Continua
+          </button>
+        )}
       </div>
     </div>
   );
@@ -1443,44 +1475,64 @@ function CustomAmountModal({
           )}
         </div>
 
-        {/* Amount Display */}
+        {/* Amount Display and Continue Button */}
         {isValidAmount && (
-          <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              Importo da pagare
-            </span>
-            <span
-              className="text-[#000000]"
-              style={{
-                fontFamily: "Helvetica Neue, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              {amount.toFixed(2)}€
-            </span>
+          <div className="-mx-6 -mb-6 mt-6">
+            <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
+              <div className="flex justify-between items-center mb-4">
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Importo da pagare
+                </span>
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {amount.toFixed(2).replace('.', ',')}€
+                </span>
+              </div>
+
+              <button
+                onClick={onComplete}
+                disabled={!isValidAmount}
+                className={`w-full py-4 px-6 text-white rounded-full text-lg ${
+                  isValidAmount ? "bg-[#013D22]" : "bg-gray-400"
+                }`}
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "normal",
+                }}
+              >
+                Continua
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Continue Button */}
-        <button
-          onClick={onComplete}
-          disabled={!isValidAmount}
-          className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-            isValidAmount ? "bg-[#013D22]" : "bg-gray-400"
-          }`}
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "normal",
-          }}
-        >
-          Continua
-        </button>
+        {/* Continue Button for when no valid amount yet */}
+        {!isValidAmount && (
+          <button
+            onClick={onComplete}
+            disabled={!isValidAmount}
+            className={`w-full py-4 px-6 text-white rounded-full text-lg ${
+              isValidAmount ? "bg-[#013D22]" : "bg-gray-400"
+            }`}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
+          >
+            Continua
+          </button>
+        )}
       </div>
     </div>
   );
