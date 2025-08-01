@@ -664,10 +664,7 @@ function PartialPaymentModal({
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={() => {
-        setCurrentView("menu");
-        resetAmounts();
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -754,10 +751,7 @@ function ProductSelectionModal({
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={() => {
-        setCurrentView("menu");
-        resetAmounts();
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up"
@@ -926,10 +920,7 @@ function TipModal({
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={() => {
-        setCurrentView("menu");
-        resetAmounts();
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -993,7 +984,7 @@ function TipModal({
               {/* "Consigliato" label for 10% */}
               {percentage === 10 && (
                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-[#013D22] text-white text-xs px-2 py-1 rounded-full font-bold">
+                  <span className="bg-[#013D22] text-white text-xs px-2 py-1 roundedfull font-bold">
                     Consigliato
                   </span>
                 </div>
@@ -1132,10 +1123,7 @@ function PaymentModal({
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={() => {
-        setCurrentView("menu");
-        resetAmounts();
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -1233,10 +1221,7 @@ function EqualDivisionModal({
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={() => {
-        setCurrentView("menu");
-        resetAmounts();
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
@@ -1382,10 +1367,7 @@ function CustomAmountModal({
   return (
     <div 
       className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
-      onClick={() => {
-        setCurrentView("menu");
-        resetAmounts();
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
