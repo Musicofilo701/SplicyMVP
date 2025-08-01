@@ -604,13 +604,34 @@ function TipModal({
   onComplete: () => void;
   setCustomTipPercentage: (percentage: string) => void;
 }) {
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [noTip, setNoTip] = useState(false);
+  
   const tipAmount = tipPercentage > 0 ? (baseAmount * tipPercentage / 100) : customTip;
   const total = baseAmount + tipAmount;
+
+  const handlePercentageClick = (percentage: number) => {
+    onTipChange(percentage, 0);
+    setShowCustomInput(false);
+    setNoTip(false);
+  };
+
+  const handleCustomInputClick = () => {
+    setShowCustomInput(true);
+    setNoTip(false);
+    onTipChange(0, 0);
+  };
+
+  const handleNoTipClick = () => {
+    setNoTip(true);
+    setShowCustomInput(false);
+    onTipChange(0, 0);
+  };
 
   const handleCustomTipPercentageChange = (e: any) => {
     const value = e.target.value;
     setCustomTipPercentage(value);
-    if (value) {
+    if (value && parseFloat(value) > 0) {
       const percentage = parseFloat(value);
       onTipChange(percentage, 0);
     } else {
@@ -637,42 +658,85 @@ function TipModal({
           Hai ricevuto un ottimo servizio? Lascia una mancia per dimostrare il tuo apprezzamento.
         </p>
 
-        {/* Tip Options */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        {/* Tip Options - Larger buttons */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
           {[5, 10, 15].map(percentage => (
-            <button
-              key={percentage}
-              onClick={() => onTipChange(percentage, 0)}
-              className={`py-4 px-6 rounded-xl font-bold border-2 ${
-                tipPercentage === percentage
-                  ? 'bg-[#013D22] text-white border-[#013D22]'
-                  : 'bg-white text-[#000000] border-gray-300'
-              }`}
-            >
-              {percentage}%
-            </button>
+            <div key={percentage} className="relative">
+              <button
+                onClick={() => handlePercentageClick(percentage)}
+                className={`w-full py-6 px-4 rounded-2xl font-bold text-lg transition-all ${
+                  tipPercentage === percentage && !showCustomInput && !noTip
+                    ? 'bg-[#013D22] text-white'
+                    : 'bg-gray-100 text-[#000000] border border-gray-300'
+                }`}
+              >
+                {percentage}%
+              </button>
+              {/* "Consigliato" label for 10% */}
+              {percentage === 10 && (
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-[#013D22] text-white text-xs px-2 py-1 rounded-full font-bold">
+                    Consigliato
+                  </span>
+                </div>
+              )}
+              {/* Tip amount display */}
+              <div className="text-center mt-2">
+                <span className="text-[#000000] text-sm">
+                  {(baseAmount * percentage / 100).toFixed(2)}€
+                </span>
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* Custom Options */}
+        {/* Custom Input Section */}
+        {showCustomInput && (
+          <div className="mb-6">
+            <div className="flex items-center space-x-3">
+              <input
+                type="number"
+                value={customTipPercentage}
+                onChange={handleCustomTipPercentageChange}
+                placeholder="Es. 12"
+                min="0"
+                max="100"
+                step="0.1"
+                className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium text-center"
+                style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+                autoFocus
+              />
+              <span className="text-[#000000] font-bold text-lg">%</span>
+            </div>
+            {customTipPercentage && parseFloat(customTipPercentage) > 0 && (
+              <div className="text-center mt-2">
+                <span className="text-[#000000] text-sm">
+                  {(baseAmount * parseFloat(customTipPercentage) / 100).toFixed(2)}€
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Custom Options - Smaller buttons */}
         <div className="mb-8">
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-2 gap-3">
             <button
-              onClick={() => onTipChange(0, 0)}
-              className={`py-3 px-4 rounded-full font-bold border-2 ${
-                tipPercentage === 0 && customTip === 0
-                  ? 'bg-[#013D22] text-white border-[#013D22]'
-                  : 'bg-white text-[#000000] border-gray-300'
+              onClick={handleCustomInputClick}
+              className={`py-3 px-4 rounded-2xl font-medium text-sm transition-all ${
+                showCustomInput
+                  ? 'bg-[#013D22] text-white'
+                  : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
             >
               Altro importo
             </button>
             <button
-              onClick={() => onTipChange(0, 0)}
-              className={`py-3 px-4 rounded-full font-bold border-2 ${
-                tipPercentage === 0 && customTip === 0
-                  ? 'bg-[#013D22] text-white border-[#013D22]'
-                  : 'bg-white text-[#000000] border-gray-300'
+              onClick={handleNoTipClick}
+              className={`py-3 px-4 rounded-2xl font-medium text-sm transition-all ${
+                noTip
+                  ? 'bg-[#013D22] text-white'
+                  : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
             >
               Niente mancia
