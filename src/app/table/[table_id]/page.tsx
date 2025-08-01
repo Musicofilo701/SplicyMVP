@@ -560,22 +560,22 @@ function ProductSelectionModal({
         <div className="space-y-4 flex-1 mb-6">
           {order.items.map((item, index) => (
             <div key={`${item.id}-${index}`} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl">
-              <div className="flex-1">
+              <div className="flex items-center flex-1">
+                <button
+                  onClick={() => onSelectItem(item.id)}
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 ${
+                    selectedItems.includes(item.id)
+                      ? 'bg-[#013D22] border-[#013D22]'
+                      : 'border-gray-300 bg-white'
+                  }`}
+                >
+                  {selectedItems.includes(item.id) && (
+                    <span className="text-white text-xs">✓</span>
+                  )}
+                </button>
                 <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.name}</span>
-                <div className="text-[#000000] text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.price.toFixed(2)}€</div>
               </div>
-              <button
-                onClick={() => onSelectItem(item.id)}
-                className={`w-6 h-6 rounded-sm border-2 flex items-center justify-center ${
-                  selectedItems.includes(item.id)
-                    ? 'bg-[#a9fdc0] border-[#a9fdc0]'
-                    : 'border-gray-300'
-                }`}
-              >
-                {selectedItems.includes(item.id) && (
-                  <span className="text-[#013D22] text-sm">✓</span>
-                )}
-              </button>
+              <div className="text-[#000000] text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.price.toFixed(2)}€</div>
             </div>
           ))}
         </div>
@@ -685,11 +685,11 @@ function TipModal({
                 onClick={() => handlePercentageClick(percentage)}
                 className={`w-full py-6 px-4 rounded-2xl transition-all flex flex-col items-center justify-center ${
                   tipPercentage === percentage && !showCustomInput && !noTip
-                    ? 'bg-[#B3E5FC] text-[#000000] border border-[#81D4FA]'
+                    ? 'bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]'
                     : 'bg-gray-100 text-[#000000] border border-gray-300'
                 }`}
               >
-                <span style={{ fontFamily: 'Helvetica Neue, sans-serif', fontSize: '15px', fontWeight: 'normal', lineHeight: '1.2' }}>
+                <span style={{ fontFamily: 'Helvetica Neue, sans-serif', fontSize: '15px', fontWeight: 'normal', lineHeight: '1.2', color: '#000000' }}>
                   {percentage}%
                 </span>
                 <span 
@@ -699,7 +699,8 @@ function TipModal({
                     fontSize: '15px', 
                     fontWeight: 'normal', 
                     lineHeight: '1.2',
-                    opacity: 0.6
+                    color: '#666666',
+                    opacity: 0.8
                   }}
                 >
                   +{(baseAmount * percentage / 100).toFixed(2)}€
@@ -752,7 +753,7 @@ function TipModal({
               onClick={handleCustomInputClick}
               className={`py-3 px-4 rounded-2xl transition-all ${
                 showCustomInput
-                  ? 'bg-[#B3E5FC] text-[#000000] border border-[#81D4FA]'
+                  ? 'bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]'
                   : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
               style={{ 
@@ -767,7 +768,7 @@ function TipModal({
               onClick={handleNoTipClick}
               className={`py-3 px-4 rounded-2xl transition-all ${
                 noTip
-                  ? 'bg-[#B3E5FC] text-[#000000] border border-[#81D4FA]'
+                  ? 'bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]'
                   : 'bg-gray-100 text-[#000000] border border-gray-300'
               }`}
               style={{ 
