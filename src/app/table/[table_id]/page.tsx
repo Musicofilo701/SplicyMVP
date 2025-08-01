@@ -552,23 +552,25 @@ function PaymentView({
     <div className="space-y-6">
       {/* Order Total Section */}
       <div className="mb-8">
-        <h2
-          className="text-lg text-[#000000] mb-4"
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "bold",
-          }}
-        >
-          Conto totale
-        </h2>
-        <div
-          className="text-4xl text-[#000000] mb-6"
-          style={{
-            fontFamily: "Helvetica Neue, sans-serif",
-            fontWeight: "bold",
-          }}
-        >
-          {order.orderTotal.toFixed(2).replace('.', ',')}€
+        <div className="flex justify-between items-center mb-6">
+          <h2
+            className="text-base text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Conto totale
+          </h2>
+          <div
+            className="text-2xl text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            {order.orderTotal.toFixed(2).replace('.', ',')}€
+          </div>
         </div>
       </div>
 
@@ -580,12 +582,22 @@ function PaymentView({
             className="flex justify-between items-center"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+              <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+                <span
+                  className="text-white text-xs"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {index + 1}
+                </span>
+              </div>
               <span
                 className="text-[#000000]"
                 style={{
                   fontFamily: "Helvetica Neue, sans-serif",
-                  fontWeight: "normal",
+                  fontWeight: "bold",
                   fontSize: "16px",
                 }}
               >
@@ -609,11 +621,11 @@ function PaymentView({
       </div>
 
       {/* Payment Options */}
-      <div className="space-y-4 mt-8">
+      <div className="space-y-3 mt-8">
         {/* Pay Full Amount Button */}
         <button
           onClick={onPayFull}
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
+          className="w-full py-3 px-6 text-[#013D22] bg-[#fefff5] border-2 border-[#013D22] rounded-full text-base transition-colors"
           style={{
             fontFamily: "Helvetica Neue, sans-serif",
             fontWeight: "normal",
@@ -625,7 +637,7 @@ function PaymentView({
         {/* Pay Partial Amount Button */}
         <button
           onClick={onPayPartial}
-          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
+          className="w-full py-3 px-6 text-white bg-[#013D22] rounded-full text-base transition-colors hover:bg-[#013D22]"
           style={{
             fontFamily: "Helvetica Neue, sans-serif",
             fontWeight: "normal",
