@@ -512,7 +512,7 @@ function MenuView({ order }: { order: Order }) {
                   fontWeight: "bold",
                 }}
               >
-                {item.price.toFixed(2)}€
+                {Number(item.price).toFixed(2)}€
               </p>
             </div>
             {index === 0 && (
@@ -550,14 +550,14 @@ function PaymentView({
 }) {
   // Group identical items together
   const groupedItems = order.items.reduce((acc, item) => {
-    const existingGroup = acc.find(group => group.name === item.name && group.price === item.price);
+    const existingGroup = acc.find(group => group.name === item.name && Number(group.price) === Number(item.price));
     if (existingGroup) {
       existingGroup.count += 1;
       existingGroup.items.push(item);
     } else {
       acc.push({
         name: item.name,
-        price: item.price,
+        price: Number(item.price),
         count: 1,
         items: [item]
       });
@@ -766,14 +766,14 @@ function ProductSelectionModal({
 }) {
   // Group identical items together
   const groupedItems = order.items.reduce((acc, item) => {
-    const existingGroup = acc.find(group => group.name === item.name && group.price === item.price);
+    const existingGroup = acc.find(group => group.name === item.name && Number(group.price) === Number(item.price));
     if (existingGroup) {
       existingGroup.count += 1;
       existingGroup.items.push(item);
     } else {
       acc.push({
         name: item.name,
-        price: item.price,
+        price: Number(item.price),
         count: 1,
         items: [item]
       });
@@ -788,7 +788,7 @@ function ProductSelectionModal({
   const handleGroupSelection = (group: {name: string, price: number, count: number, items: MenuItem[]}) => {
     // Check if any item in this group is selected
     const isAnySelected = group.items.some(item => selectedItems.includes(item.id));
-    
+
     if (isAnySelected) {
       // Deselect all items in this group
       group.items.forEach(item => {
