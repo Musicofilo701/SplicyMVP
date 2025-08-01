@@ -448,7 +448,7 @@ function MenuView({ order }: { order: Order }) {
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
         <button 
           className="bg-[#013D22] text-white px-6 py-3 rounded-full shadow-lg"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
         >
           Paga ora online
         </button>
@@ -507,7 +507,7 @@ function PaymentView({
         <button
           onClick={onPayFull}
           className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
         >
           Paga il totale del conto
         </button>
@@ -516,7 +516,7 @@ function PaymentView({
         <button
           onClick={onPayPartial}
           className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
         >
           Paga una parte
         </button>
@@ -556,21 +556,21 @@ function PartialPaymentModal({
           <button
             onClick={onEqualDivision}
             className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
           >
             Dividi in parti uguali
           </button>
           <button
             onClick={onCustomAmountSelection}
             className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
           >
             Scegli un importo personalizzato
           </button>
           <button
             onClick={onProductSelection}
             className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
           >
             Paga i prodotti che hai mangiato
           </button>
@@ -647,7 +647,7 @@ function ProductSelectionModal({
             className={`w-full py-4 px-6 text-white rounded-full text-lg ${
               selectedItems.length === 0 ? 'bg-gray-400' : 'bg-[#013D22]'
             }`}
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
           >
             Paga
           </button>
@@ -681,7 +681,7 @@ function TipModal({
 }) {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [noTip, setNoTip] = useState(false);
-  
+
   const tipAmount = tipPercentage > 0 ? (baseAmount * tipPercentage / 100) : customTip;
   const total = baseAmount + tipAmount;
 
@@ -830,8 +830,7 @@ function TipModal({
               style={{ 
                 fontFamily: 'Helvetica Neue, sans-serif', 
                 fontSize: '15px', 
-                fontWeight: 'normal'
-              }}
+                fontWeight: 'normal'}}
             >
               Niente mancia
             </button>
@@ -866,7 +865,7 @@ function TipModal({
         <button
           onClick={onComplete}
           className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
         >
           Paga
         </button>
@@ -911,7 +910,7 @@ function PaymentModal({
         </div>
 
         {/* Pay Button */}
-        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
+        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
           Paga
         </button>
       </div>
@@ -985,7 +984,7 @@ function EqualDivisionModal({
           className={`w-full py-4 px-6 text-white rounded-full text-lg ${
             peopleCount && parseInt(peopleCount) > 0 ? 'bg-[#013D22]' : 'bg-gray-400'
           }`}
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
         >
           Continua
         </button>
@@ -1078,7 +1077,7 @@ function CustomAmountModal({
           className={`w-full py-4 px-6 text-white rounded-full text-lg ${
             isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
           }`}
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
         >
           Continua
         </button>
