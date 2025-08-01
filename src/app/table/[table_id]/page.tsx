@@ -816,12 +816,12 @@ function ProductSelectionModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up"
+        className="bg-white rounded-t-3xl w-full max-w-md relative h-[80vh] animate-slide-up flex flex-col"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 p-6 pb-0 flex-shrink-0">
           <button onClick={onGoBack} className="text-[#000000] text-2xl">
             ←
           </button>
@@ -839,62 +839,64 @@ function ProductSelectionModal({
           </button>
         </div>
 
-        {/* Product List */}
-        <div className="space-y-4 flex-1 mb-6">
-          {groupedItems.map((group, index) => (
-            <div
-              key={`${group.name}-${index}`}
-              onClick={() => handleGroupSelection(group)}
-              className="flex items-center justify-between p-4 border border-gray-200 bg-white rounded-xl cursor-pointer transition-all"
-            >
-              <div className="flex items-center flex-1">
-                <div
-                  className={`w-5 h-5 border-2 rounded-sm mr-3 flex items-center justify-center transition-all ${
-                    isGroupSelected(group)
-                      ? "bg-[#a9fdc0] border-[#a9fdc0]"
-                      : "border-gray-300 bg-white"
-                  }`}
-                >
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+        {/* Product List - Scrollable */}
+        <div className="flex-1 overflow-y-auto px-6">
+          <div className="space-y-4 pb-4">
+            {groupedItems.map((group, index) => (
+              <div
+                key={`${group.name}-${index}`}
+                onClick={() => handleGroupSelection(group)}
+                className="flex items-center justify-between p-4 border border-gray-200 bg-white rounded-xl cursor-pointer transition-all"
+              >
+                <div className="flex items-center flex-1">
+                  <div
+                    className={`w-5 h-5 border-2 rounded-sm mr-3 flex items-center justify-center transition-all ${
+                      isGroupSelected(group)
+                        ? "bg-[#a9fdc0] border-[#a9fdc0]"
+                        : "border-gray-300 bg-white"
+                    }`}
+                  >
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+                      <span
+                        className="text-white text-xs"
+                        style={{
+                          fontFamily: "Helvetica Neue, sans-serif",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {group.count}
+                      </span>
+                    </div>
                     <span
-                      className="text-white text-xs"
+                      className="text-[#000000]"
                       style={{
                         fontFamily: "Helvetica Neue, sans-serif",
-                        fontWeight: "bold",
+                        fontWeight: "normal",
                       }}
                     >
-                      {group.count}
+                      {group.name}
                     </span>
                   </div>
-                  <span
-                    className="text-[#000000]"
-                    style={{
-                      fontFamily: "Helvetica Neue, sans-serif",
-                      fontWeight: "normal",
-                    }}
-                  >
-                    {group.name}
-                  </span>
+                </div>
+                <div
+                  className="text-[#000000] text-sm"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "normal",
+                  }}
+                >
+                  {(group.price * group.count).toFixed(2)}€
                 </div>
               </div>
-              <div
-                className="text-[#000000] text-sm"
-                style={{
-                  fontFamily: "Helvetica Neue, sans-serif",
-                  fontWeight: "normal",
-                }}
-              >
-                {(group.price * group.count).toFixed(2)}€
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-auto -mx-6 -mb-6">
-          <div className="bg-[#a9fdc0] px-6 pt-4 pb-6">
+        <div className="flex-shrink-0">
+          <div className="bg-[#a9fdc0] px-6 pt-4 pb-6 -mx-6 -mb-6">
             <div className="flex justify-between items-center mb-4">
               <span
                 className="text-[#000000]"
