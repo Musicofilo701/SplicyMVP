@@ -662,14 +662,21 @@ function PartialPaymentModal({
   onCustomAmountSelection: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
+    <div 
+      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
+      onClick={() => {
+        setCurrentView("menu");
+        resetAmounts();
+      }}
+    >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ←
           </button>
           <h2
@@ -681,7 +688,7 @@ function PartialPaymentModal({
           >
             Paga una parte
           </h2>
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
         </div>
@@ -745,14 +752,21 @@ function ProductSelectionModal({
     .reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
+    <div 
+      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
+      onClick={() => {
+        setCurrentView("menu");
+        resetAmounts();
+      }}
+    >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onGoBack} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-2xl">
             ←
           </button>
           <h2
@@ -764,7 +778,7 @@ function ProductSelectionModal({
           >
             Paga i tuoi prodotti
           </h2>
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
         </div>
@@ -785,9 +799,6 @@ function ProductSelectionModal({
                       : "border-gray-300 bg-white"
                   }`}
                 >
-                  {selectedItems.includes(item.id) && (
-                    <div className="w-3 h-3 bg-[#013D22] rounded-sm"></div>
-                  )}
                 </div>
                 <span
                   className="text-[#000000]"
@@ -913,18 +924,25 @@ function TipModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
+    <div 
+      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
+      onClick={() => {
+        setCurrentView("menu");
+        resetAmounts();
+      }}
+    >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onGoBack} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-2xl">
             ←
           </button>
           <h2 className="text-lg font-bold text-[#000000]">Premia Luca</h2>
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
         </div>
@@ -1112,14 +1130,21 @@ function PaymentModal({
   onGoBack: () => void;
 }) {
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
+    <div 
+      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
+      onClick={() => {
+        setCurrentView("menu");
+        resetAmounts();
+      }}
+    >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onGoBack} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-2xl">
             ←
           </button>
           <h2
@@ -1131,7 +1156,7 @@ function PaymentModal({
           >
             Paga
           </h2>
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
         </div>
@@ -1206,14 +1231,21 @@ function EqualDivisionModal({
       : 0;
 
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
+    <div 
+      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
+      onClick={() => {
+        setCurrentView("menu");
+        resetAmounts();
+      }}
+    >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onGoBack} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-2xl">
             ←
           </button>
           <h2
@@ -1225,7 +1257,7 @@ function EqualDivisionModal({
           >
             Dividi in parti uguali
           </h2>
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
         </div>
@@ -1348,14 +1380,21 @@ function CustomAmountModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
+    <div 
+      className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50"
+      onClick={() => {
+        setCurrentView("menu");
+        resetAmounts();
+      }}
+    >
       <div
         className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
         style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button onClick={onGoBack} className="text-[#000000] text-xl">
+          <button onClick={onGoBack} className="text-[#000000] text-2xl">
             ←
           </button>
           <h2
@@ -1367,7 +1406,7 @@ function CustomAmountModal({
           >
             Importo personalizzato
           </h2>
-          <button onClick={onClose} className="text-[#000000] text-xl">
+          <button onClick={onClose} className="text-[#000000] text-2xl">
             ×
           </button>
         </div>
