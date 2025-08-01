@@ -175,19 +175,18 @@ export const DELETE = requireAuth(async (request: AuthenticatedRequest) => {
     );
 
     // Log to check what's in the database before deletion
-    const { data: existingOrder, error: fetchError } = await serviceSupabase
+    const { data: existingOrders, error: fetchError } = await serviceSupabase
         .from("orders")
         .select("*")
-        .eq("table_id", table_id)
-        .single();
+        .eq("table_id", table_id);
 
-    // Confirm if the existing order was found.
-    if (fetchError || !existingOrder) {
+    // Confirm if the existing orders were found.
+    if (fetchError || !existingOrders || existingOrders.length === 0) {
         console.error("Order not found for deletion:", fetchError);
         return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    console.log("Existing order for verification before deletion:", existingOrder);
+    console.log("Existing orders for verification before deletion:", existingOrders);
 
     // Proceed to delete with service role
     const { error } = await serviceSupabase
@@ -200,16 +199,15 @@ export const DELETE = requireAuth(async (request: AuthenticatedRequest) => {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Confirm deletion by checking if record still exists
+    // Confirm deletion by checking if records still exist
     const { data: verifyDeleted } = await serviceSupabase
         .from("orders")
         .select("id")
-        .eq("table_id", table_id)
-        .single();
+        .eq("table_id", table_id);
 
-    if (verifyDeleted) {
-        console.error("Order still exists after delete attempt");
-        return NextResponse.json({ error: "Delete failed - order still exists" }, { status: 500 });
+    if (verifyDeleted && verifyDeleted.length > 0) {
+        console.error("Orders still exist after delete attempt");
+        return NextResponse.json({ error: "Delete failed - orders still exist" }, { status: 500 });
     }
 
     console.log("Order successfully deleted for table_id:", table_id);
