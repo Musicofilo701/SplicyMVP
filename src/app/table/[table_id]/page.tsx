@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 
 interface MenuItem {
   id: string;
@@ -32,13 +32,13 @@ export default function TablePage() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<'menu' | 'payment'>('menu');
+  const [currentView, setCurrentView] = useState<"menu" | "payment">("menu");
   const [paymentSelection, setPaymentSelection] = useState<PaymentSelection>({
     selectedItems: [],
     tipPercentage: 0,
     customTip: 0,
     equalDivisionAmount: 0,
-    customAmountValue: 0
+    customAmountValue: 0,
   });
 
   // Modal states
@@ -46,13 +46,13 @@ export default function TablePage() {
   const [showProductSelection, setShowProductSelection] = useState(false);
   const [showTipModal, setShowTipModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentType, setPaymentType] = useState<'full' | 'partial'>('full');
+  const [paymentType, setPaymentType] = useState<"full" | "partial">("full");
   const [showEqualDivisionModal, setShowEqualDivisionModal] = useState(false);
   const [showCustomAmountModal, setShowCustomAmountModal] = useState(false);
   const [modalHistory, setModalHistory] = useState<string[]>([]);
-  const [peopleCount, setPeopleCount] = useState('');
-  const [customAmount, setCustomAmount] = useState('');
-  const [customTipPercentage, setCustomTipPercentage] = useState('');
+  const [peopleCount, setPeopleCount] = useState("");
+  const [customAmount, setCustomAmount] = useState("");
+  const [customTipPercentage, setCustomTipPercentage] = useState("");
 
   useEffect(() => {
     fetchTableOrder();
@@ -65,11 +65,11 @@ export default function TablePage() {
       tipPercentage: 0,
       customTip: 0,
       equalDivisionAmount: 0,
-      customAmountValue: 0
+      customAmountValue: 0,
     });
-    setPeopleCount('');
-    setCustomAmount('');
-    setCustomTipPercentage('');
+    setPeopleCount("");
+    setCustomAmount("");
+    setCustomTipPercentage("");
   };
 
   const handleGoBack = () => {
@@ -85,21 +85,21 @@ export default function TablePage() {
     setShowCustomAmountModal(false);
 
     // Open previous modal
-    if (previousModal === 'partial') {
+    if (previousModal === "partial") {
       setShowPartialModal(true);
-    } else if (previousModal === 'productSelection') {
+    } else if (previousModal === "productSelection") {
       setShowProductSelection(true);
-    } else if (previousModal === 'equalDivision') {
+    } else if (previousModal === "equalDivision") {
       setShowEqualDivisionModal(true);
-    } else if (previousModal === 'customAmount') {
+    } else if (previousModal === "customAmount") {
       setShowCustomAmountModal(true);
-    } else if (previousModal === 'tip') {
+    } else if (previousModal === "tip") {
       setShowTipModal(true);
-    } else if (previousModal === 'payment') {
-      setCurrentView('payment');
+    } else if (previousModal === "payment") {
+      setCurrentView("payment");
     } else {
       // If no history, go back to payment view
-      setCurrentView('payment');
+      setCurrentView("payment");
     }
   };
 
@@ -111,126 +111,135 @@ export default function TablePage() {
     setShowEqualDivisionModal(false);
     setShowCustomAmountModal(false);
     setModalHistory([]);
-    setCurrentView('payment');
+    setCurrentView("payment");
   };
 
   const fetchTableOrder = async () => {
     try {
       const response = await fetch(`/api/table-access?table_id=${table_id}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch order');
+        throw new Error("Failed to fetch order");
       }
       const data = await response.json();
       setOrder(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSelectItem = (itemId: string) => {
-    setPaymentSelection(prev => ({
+    setPaymentSelection((prev) => ({
       ...prev,
       selectedItems: prev.selectedItems.includes(itemId)
-        ? prev.selectedItems.filter(id => id !== itemId)
-        : [...prev.selectedItems, itemId]
+        ? prev.selectedItems.filter((id) => id !== itemId)
+        : [...prev.selectedItems, itemId],
     }));
   };
 
   const calculateSelectedTotal = () => {
     if (!order) return 0;
     return order.items
-      .filter(item => paymentSelection.selectedItems.includes(item.id))
+      .filter((item) => paymentSelection.selectedItems.includes(item.id))
       .reduce((sum, item) => sum + item.price, 0);
   };
 
   const calculateTipAmount = () => {
-    const baseAmount = paymentType === 'full' ? (order?.orderTotal || 0) : calculateSelectedTotal();
+    const baseAmount =
+      paymentType === "full"
+        ? order?.orderTotal || 0
+        : calculateSelectedTotal();
     return paymentSelection.tipPercentage > 0
-      ? (baseAmount * paymentSelection.tipPercentage / 100)
+      ? (baseAmount * paymentSelection.tipPercentage) / 100
       : paymentSelection.customTip;
   };
 
   const calculateFinalTotal = () => {
-    const baseAmount = paymentType === 'full' ? (order?.orderTotal || 0) : calculateSelectedTotal();
+    const baseAmount =
+      paymentType === "full"
+        ? order?.orderTotal || 0
+        : calculateSelectedTotal();
     return baseAmount + calculateTipAmount();
   };
 
   const handlePayFull = () => {
     resetAmounts();
-    setPaymentType('full');
-    setModalHistory(['payment']);
+    setPaymentType("full");
+    setModalHistory(["payment"]);
     setShowTipModal(true);
   };
 
   const handlePayPartial = () => {
     resetAmounts();
-    setPaymentType('partial');
+    setPaymentType("partial");
     setShowPartialModal(true);
   };
 
   const handleProductSelection = () => {
-    setPaymentSelection(prev => ({
+    setPaymentSelection((prev) => ({
       ...prev,
       equalDivisionAmount: 0,
-      customAmountValue: 0
+      customAmountValue: 0,
     }));
-    setModalHistory(prev => [...prev, 'partial']);
+    setModalHistory((prev) => [...prev, "partial"]);
     setShowPartialModal(false);
     setShowProductSelection(true);
   };
 
   const handleProductSelectionComplete = () => {
-    setModalHistory(prev => [...prev, 'productSelection']);
+    setModalHistory((prev) => [...prev, "productSelection"]);
     setShowProductSelection(false);
     setShowTipModal(true);
   };
 
   const handleEqualDivision = () => {
-    setPaymentSelection(prev => ({
+    setPaymentSelection((prev) => ({
       ...prev,
       selectedItems: [],
-      customAmountValue: 0
+      customAmountValue: 0,
     }));
-    setModalHistory(prev => [...prev, 'partial']);
+    setModalHistory((prev) => [...prev, "partial"]);
     setShowPartialModal(false);
     setShowEqualDivisionModal(true);
   };
 
   const handleCustomAmountSelection = () => {
-    setPaymentSelection(prev => ({
+    setPaymentSelection((prev) => ({
       ...prev,
       selectedItems: [],
-      equalDivisionAmount: 0
+      equalDivisionAmount: 0,
     }));
-    setModalHistory(prev => [...prev, 'partial']);
+    setModalHistory((prev) => [...prev, "partial"]);
     setShowPartialModal(false);
     setShowCustomAmountModal(true);
   };
 
   const handleEqualDivisionComplete = (amount: number) => {
-    setPaymentSelection(prev => ({ ...prev, equalDivisionAmount: amount }));
-    setModalHistory(prev => [...prev, 'equalDivision']);
+    setPaymentSelection((prev) => ({ ...prev, equalDivisionAmount: amount }));
+    setModalHistory((prev) => [...prev, "equalDivision"]);
     setShowEqualDivisionModal(false);
     setShowTipModal(true);
   };
 
   const handleCustomAmountComplete = () => {
-    setModalHistory(prev => [...prev, 'customAmount']);
+    setModalHistory((prev) => [...prev, "customAmount"]);
     setShowCustomAmountModal(false);
     setShowTipModal(true);
   };
 
   const handleTipComplete = () => {
-    setModalHistory(prev => [...prev, 'tip']);
+    setModalHistory((prev) => [...prev, "tip"]);
     setShowTipModal(false);
     setShowPaymentModal(true);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#fefff5] flex items-center justify-center" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="min-h-screen bg-[#fefff5] flex items-center justify-center"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#013D22] mx-auto"></div>
           <p className="mt-4 text-[#000000] font-bold">Caricamento...</p>
@@ -241,14 +250,18 @@ export default function TablePage() {
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-[#fefff5] flex items-center justify-center p-4" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="min-h-screen bg-[#fefff5] flex items-center justify-center p-4"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
           <h1 className="text-xl font-bold text-[#000000] mb-2">
             Ordine non trovato
           </h1>
           <p className="text-[#000000]">
-            {error || 'Non è stato possibile trovare un ordine per questo tavolo.'}
+            {error ||
+              "Non è stato possibile trovare un ordine per questo tavolo."}
           </p>
         </div>
       </div>
@@ -256,7 +269,10 @@ export default function TablePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fefff5] max-w-md mx-auto relative" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div
+      className="min-h-screen bg-[#fefff5] max-w-md mx-auto relative"
+      style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+    >
       {/* Green Header */}
       <div className="bg-[#a9fdc0] h-32 relative">
         <div className="absolute top-4 right-4 text-right">
@@ -267,7 +283,12 @@ export default function TablePage() {
 
       {/* Restaurant Info */}
       <div className="bg-[#fefff5] px-6 py-4 -mt-8 relative z-10 rounded-t-3xl">
-        <h1 className="text-2xl font-bold text-[#000000] mb-1" style={{ fontSize: '25px', fontWeight: 'bold' }}>Birreria Italiana</h1>
+        <h1
+          className="text-2xl font-bold text-[#000000] mb-1"
+          style={{ fontSize: "25px", fontWeight: "bold" }}
+        >
+          Birreria Italiana
+        </h1>
         <p className="text-[#000000] text-base">Tavolo {table_id}</p>
       </div>
 
@@ -275,24 +296,36 @@ export default function TablePage() {
       <div className="px-6 mb-6">
         <div className="flex rounded-full overflow-hidden">
           <button
-            onClick={() => {setCurrentView('menu'); resetAmounts();}}
+            onClick={() => {
+              setCurrentView("menu");
+              resetAmounts();
+            }}
             className={`flex-1 py-3 px-6 text-base transition-all ${
-              currentView === 'menu'
-                ? 'bg-[#a9fdc0] text-[#000000]'
-                : 'bg-[#013D22] text-white'
+              currentView === "menu"
+                ? "bg-[#a9fdc0] text-[#000000]"
+                : "bg-[#013D22] text-white"
             }`}
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
           >
             Menù
           </button>
           <button
-            onClick={() => {setCurrentView('payment'); resetAmounts();}}
+            onClick={() => {
+              setCurrentView("payment");
+              resetAmounts();
+            }}
             className={`flex-1 py-3 px-6 text-base transition-all ${
-              currentView === 'payment'
-                ? 'bg-[#a9fdc0] text-[#000000]'
-                : 'bg-[#013D22] text-white'
+              currentView === "payment"
+                ? "bg-[#a9fdc0] text-[#000000]"
+                : "bg-[#013D22] text-white"
             }`}
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
           >
             Paga il conto
           </button>
@@ -301,7 +334,7 @@ export default function TablePage() {
 
       {/* Content */}
       <div className="px-6">
-        {currentView === 'menu' ? (
+        {currentView === "menu" ? (
           <MenuView order={order} />
         ) : (
           <PaymentView
@@ -336,9 +369,10 @@ export default function TablePage() {
       {showTipModal && (
         <TipModal
           baseAmount={
-            paymentType === 'full'
+            paymentType === "full"
               ? order.orderTotal
-              : paymentType === 'partial' && paymentSelection.selectedItems.length > 0
+              : paymentType === "partial" &&
+                  paymentSelection.selectedItems.length > 0
                 ? calculateSelectedTotal()
                 : paymentSelection.equalDivisionAmount > 0
                   ? paymentSelection.equalDivisionAmount
@@ -349,7 +383,13 @@ export default function TablePage() {
           tipPercentage={paymentSelection.tipPercentage}
           customTip={paymentSelection.customTip}
           customTipPercentage={customTipPercentage}
-          onTipChange={(tip, custom) => setPaymentSelection(prev => ({ ...prev, tipPercentage: tip, customTip: custom }))}
+          onTipChange={(tip, custom) =>
+            setPaymentSelection((prev) => ({
+              ...prev,
+              tipPercentage: tip,
+              customTip: custom,
+            }))
+          }
           onClose={handleCloseAll}
           onGoBack={handleGoBack}
           onComplete={handleTipComplete}
@@ -400,27 +440,39 @@ function MenuView({ order }: { order: Order }) {
     <div className="space-y-4">
       {/* Tab categories */}
       <div className="flex space-x-6 border-b border-[#013D22]">
-        <button 
+        <button
           className="pb-3 text-[#000000] border-b-2 border-[#000000]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "bold",
+          }}
         >
           Raccomandati
         </button>
-        <button 
+        <button
           className="pb-3 text-[#000000] opacity-60"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Antipasti
         </button>
-        <button 
+        <button
           className="pb-3 text-[#000000] opacity-60"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Primi
         </button>
-        <button 
+        <button
           className="pb-3 text-[#000000] opacity-60"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Secondi
         </button>
@@ -429,13 +481,39 @@ function MenuView({ order }: { order: Order }) {
       {/* Menu Items */}
       <div className="space-y-4">
         {order.items.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="bg-[#fefff5] rounded-2xl p-4 flex justify-between items-start shadow-sm border border-gray-100">
+          <div
+            key={`${item.id}-${index}`}
+            className="bg-[#fefff5] rounded-2xl p-4 flex justify-between items-start shadow-sm border border-gray-100"
+          >
             <div className="flex-1">
-              <h3 className="text-[#000000] text-lg mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{item.name}</h3>
-              <p className="text-[#000000] text-sm leading-relaxed mb-3" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
-                {item.description || "pane bun al pomodoro, pulled pork, cipolla di tropea caramellata, stracciatella, scamorza fusa affumicata, salsa BBQ e rucola selvatica. Aggiunta di Bacon possibile"}
+              <h3
+                className="text-[#000000] text-lg mb-2"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                {item.name}
+              </h3>
+              <p
+                className="text-[#000000] text-sm leading-relaxed mb-3"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "normal",
+                }}
+              >
+                {item.description ||
+                  "pane bun al pomodoro, pulled pork, cipolla di tropea caramellata, stracciatella, scamorza fusa affumicata, salsa BBQ e rucola selvatica. Aggiunta di Bacon possibile"}
               </p>
-              <p className="text-[#000000] text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{item.price.toFixed(2)}€</p>
+              <p
+                className="text-[#000000] text-lg"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                {item.price.toFixed(2)}€
+              </p>
             </div>
             {index === 0 && (
               <div className="w-20 h-20 bg-[#013D22] rounded-xl ml-4 flex-shrink-0"></div>
@@ -446,9 +524,12 @@ function MenuView({ order }: { order: Order }) {
 
       {/* Floating Action Button */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
-        <button 
+        <button
           className="bg-[#013D22] text-white px-6 py-3 rounded-full shadow-lg"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Paga ora online
         </button>
@@ -461,7 +542,7 @@ function MenuView({ order }: { order: Order }) {
 function PaymentView({
   order,
   onPayFull,
-  onPayPartial
+  onPayPartial,
 }: {
   order: Order;
   onPayFull: () => void;
@@ -471,10 +552,22 @@ function PaymentView({
     <div className="space-y-6">
       {/* Order Total Section */}
       <div className="text-center">
-        <h2 className="text-lg text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
+        <h2
+          className="text-lg text-[#000000] mb-2"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "bold",
+          }}
+        >
           Conto totale
         </h2>
-        <div className="text-4xl text-[#000000] mb-1" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
+        <div
+          className="text-4xl text-[#000000] mb-1"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "bold",
+          }}
+        >
           {order.orderTotal.toFixed(2)}€
         </div>
       </div>
@@ -482,19 +575,44 @@ function PaymentView({
       {/* Order Items List */}
       <div className="space-y-3">
         {order.items.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="flex justify-between items-center py-2">
+          <div
+            key={`${item.id}-${index}`}
+            className="flex justify-between items-center py-2"
+          >
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-[#000000] rounded-full"></div>
-              <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
+              <span
+                className="text-[#000000]"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "normal",
+                }}
+              >
                 {item.name}
               </span>
             </div>
             <div className="text-right">
-              <span className="text-[#000000] text-sm mr-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
-                {item.price < 10 ? `${item.price.toFixed(2)}€` : `${Math.floor(item.price)},${(item.price % 1 * 100).toFixed(0).padStart(2, '0')}€`}
+              <span
+                className="text-[#000000] text-sm mr-2"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "normal",
+                }}
+              >
+                {item.price < 10
+                  ? `${item.price.toFixed(2)}€`
+                  : `${Math.floor(item.price)},${((item.price % 1) * 100).toFixed(0).padStart(2, "0")}€`}
               </span>
-              <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>
-                {item.price < 10 ? `${item.price.toFixed(2)}€` : `${Math.floor(item.price)},${(item.price % 1 * 100).toFixed(0).padStart(2, '0')}€`}
+              <span
+                className="text-[#000000]"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "bold",
+                }}
+              >
+                {item.price < 10
+                  ? `${item.price.toFixed(2)}€`
+                  : `${Math.floor(item.price)},${((item.price % 1) * 100).toFixed(0).padStart(2, "0")}€`}
               </span>
             </div>
           </div>
@@ -507,7 +625,10 @@ function PaymentView({
         <button
           onClick={onPayFull}
           className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Paga il totale del conto
         </button>
@@ -516,7 +637,10 @@ function PaymentView({
         <button
           onClick={onPayPartial}
           className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg transition-colors hover:bg-[#013D22]"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Paga una parte
         </button>
@@ -530,7 +654,7 @@ function PartialPaymentModal({
   onClose,
   onProductSelection,
   onEqualDivision,
-  onCustomAmountSelection
+  onCustomAmountSelection,
 }: {
   onClose: () => void;
   onProductSelection: () => void;
@@ -539,13 +663,24 @@ function PartialPaymentModal({
 }) {
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button onClick={onClose} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga una parte</h2>
+          <h2
+            className="text-lg text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Paga una parte
+          </h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
@@ -556,21 +691,30 @@ function PartialPaymentModal({
           <button
             onClick={onEqualDivision}
             className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
           >
             Dividi in parti uguali
           </button>
           <button
             onClick={onCustomAmountSelection}
             className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
           >
             Scegli un importo personalizzato
           </button>
           <button
             onClick={onProductSelection}
             className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-base"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
           >
             Paga i prodotti che hai mangiato
           </button>
@@ -587,7 +731,7 @@ function ProductSelectionModal({
   onSelectItem,
   onClose,
   onGoBack,
-  onComplete
+  onComplete,
 }: {
   order: Order;
   selectedItems: string[];
@@ -597,18 +741,29 @@ function ProductSelectionModal({
   onComplete: () => void;
 }) {
   const selectedTotal = order.items
-    .filter(item => selectedItems.includes(item.id))
+    .filter((item) => selectedItems.includes(item.id))
     .reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative min-h-[80vh] animate-slide-up"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga i tuoi prodotti</h2>
+          <h2
+            className="text-lg text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Paga i tuoi prodotti
+          </h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
@@ -617,24 +772,42 @@ function ProductSelectionModal({
         {/* Product List */}
         <div className="space-y-4 flex-1 mb-6">
           {order.items.map((item, index) => (
-            <div 
-              key={`${item.id}-${index}`} 
+            <div
+              key={`${item.id}-${index}`}
               onClick={() => onSelectItem(item.id)}
               className="flex items-center justify-between p-4 border border-gray-200 bg-white rounded-xl cursor-pointer transition-all"
             >
               <div className="flex items-center flex-1">
-                <div className={`w-5 h-5 border-2 rounded-sm mr-3 flex items-center justify-center transition-all ${
-                  selectedItems.includes(item.id)
-                    ? 'bg-[#a9fdc0] border-[#a9fdc0]'
-                    : 'border-gray-300 bg-white'
-                }`}>
+                <div
+                  className={`w-5 h-5 border-2 rounded-sm mr-3 flex items-center justify-center transition-all ${
+                    selectedItems.includes(item.id)
+                      ? "bg-[#a9fdc0] border-[#a9fdc0]"
+                      : "border-gray-300 bg-white"
+                  }`}
+                >
                   {selectedItems.includes(item.id) && (
                     <div className="w-3 h-3 bg-[#013D22] rounded-sm"></div>
                   )}
                 </div>
-                <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.name}</span>
+                <span
+                  className="text-[#000000]"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontWeight: "normal",
+                  }}
+                >
+                  {item.name}
+                </span>
               </div>
-              <div className="text-[#000000] text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>{item.price.toFixed(2)}€</div>
+              <div
+                className="text-[#000000] text-sm"
+                style={{
+                  fontFamily: "Helvetica Neue, sans-serif",
+                  fontWeight: "normal",
+                }}
+              >
+                {item.price.toFixed(2)}€
+              </div>
             </div>
           ))}
         </div>
@@ -642,17 +815,36 @@ function ProductSelectionModal({
         {/* Bottom Section */}
         <div className="mt-auto">
           <div className="bg-[#a9fdc0] rounded-xl p-4 mb-4 flex justify-between items-center">
-            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Il tuo conto</span>
-            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{selectedTotal.toFixed(2)}€</span>
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              Il tuo conto
+            </span>
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              {selectedTotal.toFixed(2)}€
+            </span>
           </div>
 
           <button
             onClick={onComplete}
             disabled={selectedItems.length === 0}
             className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-              selectedItems.length === 0 ? 'bg-gray-400' : 'bg-[#013D22]'
+              selectedItems.length === 0 ? "bg-gray-400" : "bg-[#013D22]"
             }`}
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
           >
             Paga
           </button>
@@ -672,7 +864,7 @@ function TipModal({
   onClose,
   onGoBack,
   onComplete,
-  setCustomTipPercentage
+  setCustomTipPercentage,
 }: {
   baseAmount: number;
   tipPercentage: number;
@@ -687,7 +879,8 @@ function TipModal({
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [noTip, setNoTip] = useState(false);
 
-  const tipAmount = tipPercentage > 0 ? (baseAmount * tipPercentage / 100) : customTip;
+  const tipAmount =
+    tipPercentage > 0 ? (baseAmount * tipPercentage) / 100 : customTip;
   const total = baseAmount + tipAmount;
 
   const handlePercentageClick = (percentage: number) => {
@@ -721,7 +914,10 @@ function TipModal({
 
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onGoBack} className="text-[#000000] text-xl">
@@ -735,36 +931,45 @@ function TipModal({
 
         {/* Tip Message */}
         <p className="text-[#000000] text-center mb-6 text-sm">
-          Hai ricevuto un ottimo servizio? Lascia una mancia per dimostrare il tuo apprezzamento.
+          Hai ricevuto un ottimo servizio? Lascia una mancia per dimostrare il
+          tuo apprezzamento.
         </p>
 
         {/* Tip Options - Larger buttons */}
         <div className="grid grid-cols-3 gap-3 mb-6">
-          {[5, 10, 15].map(percentage => (
+          {[5, 10, 15].map((percentage) => (
             <div key={percentage} className="relative">
               <button
                 onClick={() => handlePercentageClick(percentage)}
                 className={`w-full py-6 px-4 rounded-2xl transition-all flex flex-col items-center justify-center ${
                   tipPercentage === percentage && !showCustomInput && !noTip
-                    ? 'bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]'
-                    : 'bg-gray-100 text-[#000000] border border-gray-300'
+                    ? "bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]"
+                    : "bg-gray-100 text-[#000000] border border-gray-300"
                 }`}
               >
-                <span style={{ fontFamily: 'Helvetica Neue, sans-serif', fontSize: '15px', fontWeight: 'normal', lineHeight: '1.2', color: '#000000' }}>
-                  {percentage}%
-                </span>
-                <span 
-                  className="mt-1" 
-                  style={{ 
-                    fontFamily: 'Helvetica Neue, sans-serif', 
-                    fontSize: '12px', 
-                    fontWeight: 'normal', 
-                    lineHeight: '1.2',
-                    color: '#666666',
-                    opacity: 0.8
+                <span
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontSize: "15px",
+                    fontWeight: "normal",
+                    lineHeight: "1.2",
+                    color: "#000000",
                   }}
                 >
-                  +{(baseAmount * percentage / 100).toFixed(2)}€
+                  {percentage}%
+                </span>
+                <span
+                  className="mt-1"
+                  style={{
+                    fontFamily: "Helvetica Neue, sans-serif",
+                    fontSize: "12px",
+                    fontWeight: "normal",
+                    lineHeight: "1.2",
+                    color: "#666666",
+                    opacity: 0.8,
+                  }}
+                >
+                  +{((baseAmount * percentage) / 100).toFixed(2)}€
                 </span>
               </button>
               {/* "Consigliato" label for 10% */}
@@ -792,7 +997,7 @@ function TipModal({
                 max="100"
                 step="0.1"
                 className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-[#000000] font-medium text-center"
-                style={{ fontFamily: 'Helvetica Neue, sans-serif' }}
+                style={{ fontFamily: "Helvetica Neue, sans-serif" }}
                 autoFocus
               />
               <span className="text-[#000000] font-bold text-lg">%</span>
@@ -800,7 +1005,11 @@ function TipModal({
             {customTipPercentage && parseFloat(customTipPercentage) > 0 && (
               <div className="text-center mt-2">
                 <span className="text-[#000000] text-sm">
-                  {(baseAmount * parseFloat(customTipPercentage) / 100).toFixed(2)}€
+                  {(
+                    (baseAmount * parseFloat(customTipPercentage)) /
+                    100
+                  ).toFixed(2)}
+                  €
                 </span>
               </div>
             )}
@@ -814,13 +1023,13 @@ function TipModal({
               onClick={handleCustomInputClick}
               className={`py-3 px-4 rounded-2xl transition-all ${
                 showCustomInput
-                  ? 'bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]'
-                  : 'bg-gray-100 text-[#000000] border border-gray-300'
+                  ? "bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]"
+                  : "bg-gray-100 text-[#000000] border border-gray-300"
               }`}
-              style={{ 
-                fontFamily: 'Helvetica Neue, sans-serif', 
-                fontSize: '15px', 
-                fontWeight: 'normal'
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontSize: "15px",
+                fontWeight: "normal",
               }}
             >
               Altro importo
@@ -829,13 +1038,14 @@ function TipModal({
               onClick={handleNoTipClick}
               className={`py-3 px-4 rounded-2xl transition-all ${
                 noTip
-                  ? 'bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]'
-                  : 'bg-gray-100 text-[#000000] border border-gray-300'
+                  ? "bg-[#a9fdc0] text-[#000000] border border-[#a9fdc0]"
+                  : "bg-gray-100 text-[#000000] border border-gray-300"
               }`}
-              style={{ 
-                fontFamily: 'Helvetica Neue, sans-serif', 
-                fontSize: '15px', 
-                fontWeight: 'normal'}}
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontSize: "15px",
+                fontWeight: "normal",
+              }}
             >
               Niente mancia
             </button>
@@ -844,22 +1054,31 @@ function TipModal({
 
         {/* Total Display */}
         <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-          <span 
-            className="text-[#000000]" 
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+          <span
+            className="text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
           >
             Il tuo conto
           </span>
           <div className="text-right">
-            <span 
-              className="text-[#000000] text-sm" 
-              style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            <span
+              className="text-[#000000] text-sm"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "normal",
+              }}
             >
-              {baseAmount.toFixed(2)}€ 
+              {baseAmount.toFixed(2)}€
             </span>
-            <span 
-              className="text-[#000000]" 
-              style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
             >
               {total.toFixed(2)}€
             </span>
@@ -870,7 +1089,10 @@ function TipModal({
         <button
           onClick={onComplete}
           className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Paga
         </button>
@@ -883,7 +1105,7 @@ function TipModal({
 function PaymentModal({
   total,
   onClose,
-  onGoBack
+  onGoBack,
 }: {
   total: number;
   onClose: () => void;
@@ -891,31 +1113,70 @@ function PaymentModal({
 }) {
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Paga</h2>
+          <h2
+            className="text-lg text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Paga
+          </h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
         </div>
 
         {/* Payment Message */}
-        <p className="text-[#000000] text-center mb-8 text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
+        <p
+          className="text-[#000000] text-center mb-8 text-sm"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
+        >
           Transazione protetta. I tuoi dati sono al sicuro.
         </p>
 
         {/* Total Display */}
         <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-          <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Il tuo conto</span>
-          <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{total.toFixed(2)}€</span>
+          <span
+            className="text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Il tuo conto
+          </span>
+          <span
+            className="text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            {total.toFixed(2)}€
+          </span>
         </div>
 
         {/* Pay Button */}
-        <button className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
+        <button
+          className="w-full py-4 px-6 text-white bg-[#013D22] rounded-full text-lg"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
+        >
           Paga
         </button>
       </div>
@@ -930,7 +1191,7 @@ function EqualDivisionModal({
   onPeopleCountChange,
   onClose,
   onGoBack,
-  onComplete
+  onComplete,
 }: {
   orderTotal: number;
   peopleCount: string;
@@ -939,30 +1200,59 @@ function EqualDivisionModal({
   onGoBack: () => void;
   onComplete: (amount: number) => void;
 }) {
-  const shareAmount = peopleCount && parseInt(peopleCount) > 0 ? orderTotal / parseInt(peopleCount) : 0;
+  const shareAmount =
+    peopleCount && parseInt(peopleCount) > 0
+      ? orderTotal / parseInt(peopleCount)
+      : 0;
 
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Dividi in parti uguali</h2>
+          <h2
+            className="text-lg text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Dividi in parti uguali
+          </h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
         </div>
 
         {/* Instructions */}
-        <p className="text-[#000000] text-center mb-6 text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
-          Inserisci il numero di persone per dividere il conto totale di {orderTotal.toFixed(2)}€
+        <p
+          className="text-[#000000] text-center mb-6 text-sm"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
+        >
+          Inserisci il numero di persone per dividere il conto totale di{" "}
+          {orderTotal.toFixed(2)}€
         </p>
 
         {/* Input */}
         <div className="mb-6">
-          <label className="block text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Numero di persone</label>
+          <label
+            className="block text-[#000000] mb-2"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Numero di persone
+          </label>
           <input
             type="number"
             value={peopleCount}
@@ -970,15 +1260,34 @@ function EqualDivisionModal({
             placeholder="Es. 4"
             min="1"
             className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
           />
         </div>
 
         {/* Share Display */}
         {shareAmount > 0 && (
           <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>La tua parte</span>
-            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{shareAmount.toFixed(2)}€</span>
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              La tua parte
+            </span>
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              {shareAmount.toFixed(2)}€
+            </span>
           </div>
         )}
 
@@ -987,9 +1296,14 @@ function EqualDivisionModal({
           onClick={() => onComplete(shareAmount)}
           disabled={!peopleCount || parseInt(peopleCount) <= 0}
           className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-            peopleCount && parseInt(peopleCount) > 0 ? 'bg-[#013D22]' : 'bg-gray-400'
+            peopleCount && parseInt(peopleCount) > 0
+              ? "bg-[#013D22]"
+              : "bg-gray-400"
           }`}
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Continua
         </button>
@@ -1006,7 +1320,7 @@ function CustomAmountModal({
   onClose,
   onGoBack,
   onComplete,
-  setPaymentSelection
+  setPaymentSelection,
 }: {
   orderTotal: number;
   customAmount: string;
@@ -1016,14 +1330,18 @@ function CustomAmountModal({
   onComplete: () => void;
   setPaymentSelection: (paymentSelection: any) => void;
 }) {
-  const amount = customAmount && parseFloat(customAmount) >0 ? parseFloat(customAmount) : 0;
+  const amount =
+    customAmount && parseFloat(customAmount) > 0 ? parseFloat(customAmount) : 0;
   const isValidAmount = amount > 0 && amount <= orderTotal;
 
   const handleCustomAmountChangeWrapper = (e: any) => {
     const value = e.target.value;
     onCustomAmountChange(value);
     if (value) {
-      setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: parseFloat(value) }));
+      setPaymentSelection((prev: any) => ({
+        ...prev,
+        customAmountValue: parseFloat(value),
+      }));
     } else {
       setPaymentSelection((prev: any) => ({ ...prev, customAmountValue: 0 }));
     }
@@ -1031,47 +1349,99 @@ function CustomAmountModal({
 
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-end justify-center z-50">
-      <div className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+      <div
+        className="bg-white rounded-t-3xl w-full max-w-md p-6 relative animate-slide-up"
+        style={{ fontFamily: "Helvetica Neue, sans-serif" }}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={onGoBack} className="text-[#000000] text-xl">
             ←
           </button>
-          <h2 className="text-lg text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo personalizzato</h2>
+          <h2
+            className="text-lg text-[#000000]"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Importo personalizzato
+          </h2>
           <button onClick={onClose} className="text-[#000000] text-xl">
             ×
           </button>
         </div>
 
         {/* Instructions */}
-        <p className="text-[#000000] text-center mb-6 text-sm" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>
+        <p
+          className="text-[#000000] text-center mb-6 text-sm"
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
+        >
           Inserisci l'importo che vuoi pagare (massimo {orderTotal.toFixed(2)}€)
         </p>
 
         {/* Input */}
         <div className="mb-6">
-          <label className="block text-[#000000] mb-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo da pagare</label>
+          <label
+            className="block text-[#000000] mb-2"
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "bold",
+            }}
+          >
+            Importo da pagare
+          </label>
           <input
             type="number"
             value={customAmount}
             onChange={handleCustomAmountChangeWrapper}
-            placeholder="Es. 25.50"
+            placeholder="Inserisci il tuo importo"
             min="0.01"
             max={orderTotal}
             step="0.01"
             className="w-full py-3 px-4 border border-gray-300 rounded-xl text-[#000000]"
-            style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+            style={{
+              fontFamily: "Helvetica Neue, sans-serif",
+              fontWeight: "normal",
+            }}
           />
           {amount > orderTotal && (
-            <p className="text-red-500 text-sm mt-2" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}>L'importo non può superare il totale del conto</p>
+            <p
+              className="text-red-500 text-sm mt-2"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "normal",
+              }}
+            >
+              L'importo non può superare il totale del conto
+            </p>
           )}
         </div>
 
         {/* Amount Display */}
         {isValidAmount && (
           <div className="bg-[#a9fdc0] rounded-xl p-4 mb-6 flex justify-between items-center">
-            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>Importo da pagare</span>
-            <span className="text-[#000000]" style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'bold' }}>{amount.toFixed(2)}€</span>
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              Importo da pagare
+            </span>
+            <span
+              className="text-[#000000]"
+              style={{
+                fontFamily: "Helvetica Neue, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              {amount.toFixed(2)}€
+            </span>
           </div>
         )}
 
@@ -1080,9 +1450,12 @@ function CustomAmountModal({
           onClick={onComplete}
           disabled={!isValidAmount}
           className={`w-full py-4 px-6 text-white rounded-full text-lg ${
-            isValidAmount ? 'bg-[#013D22]' : 'bg-gray-400'
+            isValidAmount ? "bg-[#013D22]" : "bg-gray-400"
           }`}
-          style={{ fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 'normal' }}
+          style={{
+            fontFamily: "Helvetica Neue, sans-serif",
+            fontWeight: "normal",
+          }}
         >
           Continua
         </button>
